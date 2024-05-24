@@ -8,9 +8,6 @@
 #include <stdexcept>
 using namespace Eigen;
 
-//#pragma pack(push, 1)
-//#pragma pack(pop)
-
 struct Color
 {
     uint8_t r, g, b, a;
@@ -88,10 +85,11 @@ public:
 		u = u - floor(u);
 		v = v - floor(v);
 		//因为从0开始，所以长宽需要－1
-		float uT = u * (_image.size() - 1);
-		float vT = v * (_image[0].size() - 1);
+        float uT = u * (_image[0].size() - 1);
+		float vT = (1-v) * (_image.size() - 1);
 
-        return _image[uT][vT];
+        //由于loadBMP返回的数据结构的定义,这里需要反一下
+        return _image[vT][uT];
 	}
 
 };

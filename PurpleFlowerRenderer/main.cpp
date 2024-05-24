@@ -91,15 +91,15 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 		{
 			Object* o = new Object();
 			
-			for (int i = 0; i < mesh.Vertices.size()-3; i += 3)
+			for (int i = 0; i < mesh.Indices.size()-3; i += 3)
 			{
 				Triangle* t = new Triangle();
 				for (int j = 0; j < 3; j++)
 				{
-					t->SetVertex(j, Vector3f(mesh.Vertices[i + j].Position.X, mesh.Vertices[i + j].Position.Y, mesh.Vertices[i + j].Position.Z));
+					t->SetVertex(j, Vector3f(mesh.Vertices[mesh.Indices[i+j]].Position.X, mesh.Vertices[mesh.Indices[i + j]].Position.Y, mesh.Vertices[mesh.Indices[i + j]].Position.Z));
 					t->SetColor(j, Vector3f(0.5f, 0.5f, 0.5f));
-					t->SetNormal(j, Vector4f(mesh.Vertices[i + j].Normal.X, mesh.Vertices[i + j].Normal.Y, mesh.Vertices[i + j].Normal.Z,1));
-					t->SetUV(j, Vector2f(mesh.Vertices[i + j].TextureCoordinate.X, mesh.Vertices[i + j].TextureCoordinate.Y));
+					t->SetNormal(j, Vector4f(mesh.Vertices[mesh.Indices[i + j]].Normal.X, mesh.Vertices[mesh.Indices[i + j]].Normal.Y, mesh.Vertices[mesh.Indices[i + j]].Normal.Z,1));
+					t->SetUV(j, Vector2f(mesh.Vertices[mesh.Indices[i + j]].TextureCoordinate.X, mesh.Vertices[mesh.Indices[i + j]].TextureCoordinate.Y));
 				}
 				o->Mesh.push_back(*t);
 			}
@@ -114,6 +114,24 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 	else std::cout << "模型加载失败" << std::endl;
 }
 
+void TestTexture()
+{
+	initgraph(1000, 1000);
+	auto bup = loadBMP("Res/Texture/Gun.bmp");
+
+	for (int x = 0; x < width; x++)
+	{
+		for (int y = 0; y < height; y++)
+		{
+			// 由于窗口y轴正方向向下,此处将y轴反转
+			int realY = (height - y - 1);
+			putpixel(x, y, RGB(bup[x][y].r, bup[x][y].g, bup[x][y].b));
+		}
+	}
+
+	std::cin.get();
+}
+
 int main()
 {
 
@@ -122,22 +140,17 @@ int main()
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 	//	new BlinnPhongShader(&light,&camera));
 
-	/*SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new TextureShader(&light, &camera, new Texture("Skull")));*/
-
 	SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
-		new BlinnPhongShader(&light, &camera));
+		new TextureShader(&light, &camera, new Texture("Knife")));
 
 	//SetModel("Gun", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 10, 10),
-	//	new BlinnPhongShader(&light, &camera));
+	//	new TextureShader(&light, &camera, new Texture("Gun")));
 
-	/*SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
-		new BlinnPhongShader(&light, &camera));*/
+	//SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
+	//	new BlinnPhongShader(&light, &camera));
 
 	//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
 	//	new TextureShader(&light, &camera,new Texture("Skull")));
-
-	//&light, &camera,new Texture("head-a0")
 
 	SetLight(); // 设置光照
 
@@ -173,4 +186,6 @@ int main()
 		std::cout << "第" << ++frameCount <<"帧" << "\n";
 
 	} while (true);
+
+
 }
