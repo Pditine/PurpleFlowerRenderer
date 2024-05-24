@@ -90,6 +90,7 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 		for (const auto& mesh : loader.LoadedMeshes)
 		{
 			Object* o = new Object();
+			
 			for (int i = 0; i < mesh.Vertices.size()-3; i += 3)
 			{
 				Triangle* t = new Triangle();
@@ -116,14 +117,26 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 int main()
 {
 
-	//输入兔子
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
 
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 	//	new BlinnPhongShader(&light,&camera));
 
-	SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new NormalShader());
+	/*SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+		new TextureShader(&light, &camera, new Texture("Skull")));*/
+
+	SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
+		new BlinnPhongShader(&light, &camera));
+
+	//SetModel("Gun", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 10, 10),
+	//	new BlinnPhongShader(&light, &camera));
+
+	/*SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
+		new BlinnPhongShader(&light, &camera));*/
+
+	//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
+	//	new TextureShader(&light, &camera,new Texture("Skull")));
+
 	//&light, &camera,new Texture("head-a0")
 
 	SetLight(); // 设置光照
@@ -157,7 +170,7 @@ int main()
 			}
 		}
 
-		std::cout << "第" << frameCount++ <<"帧" << "\n";
+		std::cout << "第" << ++frameCount <<"帧" << "\n";
 
 	} while (true);
 }
