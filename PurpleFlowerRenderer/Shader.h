@@ -123,3 +123,43 @@ public:
 	}
 };
 
+class CartoonShader : public Shader
+{
+private:
+	Light* _light;
+	Camera* _camera;
+	Vector3f _baseColor;
+
+public:
+	CartoonShader(Light* light, Camera* camera,Vector3f baseColor) : _light(light), _camera(camera),_baseColor(baseColor)
+	{
+	}
+
+	Vector3f GetColor(const FragmentData& data) override
+	{
+		Vector3f worldNormal = Vector3f(data.normal.x(), data.normal.y(), data.normal.z());
+
+		Vector3f resultColor = Vector3f(0, 0, 0);
+
+		float halfLambert = (worldNormal.dot(_light->Direction) + 1) / 2;
+
+		Vector3f diffuse = BlendColor(_light->Color * _light->Intensity, data.color, 0.3f) * halfLambert;
+
+		Vector3f ambient = Vector3f(0.05f, 0.05f, 0.05f);
+
+		Vector3f halfDirection = (_camera->Direction + _light->Direction).normalized();
+
+		Vector3f specular = BlendColor(_light->Color, Vector3f(1, 1, 1)) * pow(Clamp(halfDirection.dot(worldNormal)), 50) * _light->Intensity;
+
+		resultColor += ambient + diffuse + specular;
+
+		float num = resultColor.norm();
+		Vector3f returnColor = Vector3f();
+		if (num > 0.8f) returnColor = _baseColor;
+		else if (num > 0.6f) returnColor = _baseColor*0.8f;
+		else if (num > 0.4f) returnColor = _baseColor*0.6f;
+		else if (num > 0.2f) returnColor = _baseColor*0.4f;
+
+		return returnColor * 255.f;
+	}
+};

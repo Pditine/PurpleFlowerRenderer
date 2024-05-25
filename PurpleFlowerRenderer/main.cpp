@@ -50,7 +50,7 @@ void SetCamera()
 
 void SetLight()
 {
-	light.Direction = Vector3f(1, 1, 1).normalized();
+	light.Direction = Vector3f(1, 1, -1).normalized();
 	light.Intensity = 0.8f;
 	light.Color = Vector3f(0.8f,0.8f,0.8f);
 }
@@ -140,8 +140,11 @@ int main()
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 	//	new BlinnPhongShader(&light,&camera));
 
-	SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
-		new TextureShader(&light, &camera, new Texture("Knife")));
+	SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+		new CartoonShader(&light, &camera,Vector3f(0,1,1)));
+
+	//SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
+	//	new TextureShader(&light, &camera, new Texture("Knife")));
 
 	//SetModel("Gun", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 10, 10),
 	//	new TextureShader(&light, &camera, new Texture("Gun")));
@@ -149,8 +152,11 @@ int main()
 	//SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
 	//	new BlinnPhongShader(&light, &camera));
 
-	//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
-	//	new TextureShader(&light, &camera,new Texture("Skull")));
+	/*SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
+		new CartoonShader(&light, &camera, Vector3f(0, 1, 1)));*/
+
+	/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
+		new TextureShader(&light, &camera,new Texture("Skull")));*/
 
 	SetLight(); // …Ë÷√π‚’’
 
