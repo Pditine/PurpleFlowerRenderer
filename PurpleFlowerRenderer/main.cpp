@@ -1,9 +1,9 @@
 #include <iostream>
-#include <easyx.h>
 #include "Renderer.h"
 #include "OBJ_Loader.h"
 #include "Shader.h"
 #include "thread"
+#include "opencv2/opencv.hpp"
 
 constexpr int width = 700;
 constexpr int height = 700;
@@ -12,30 +12,6 @@ Light light;
 Camera camera;
 int frameCount = 0;
 bool hasInput = false;
-
-void SetObjects()
-{
-	Object o1;
-	Triangle t1;
-	t1.SetVertex(Vector3f(0, 0.2f, -2), Vector3f(-2, 0, -2), Vector3f(1, 0, -2));
-	t1.SetColor(Vector3f(255, 0, 0), Vector3f(0, 255, 0), Vector3f(0, 0, 255));
-	o1.Mesh.push_back(t1);
-	o1.Position = Vector3f(0, 0, 0);
-	o1.Rotation = Vector3f(0, 0, 0);
-	o1.Scale = Vector3f(2, 2, 1);
-	objectList.push_back(o1);
-
-	Object o2;
-	Triangle t2;
-	t2.SetVertex(Vector3f(2, 1, 0), Vector3f(-1, 4, -5), Vector3f(-1, -3, -5));
-	t2.SetColor(Vector3f(100, 100, 200), Vector3f(100, 200, 100), Vector3f(100, 100, 100));
-	o2.Mesh.push_back(t2);
-	o2.Position = Vector3f(0, 0, 0);
-	o2.Rotation = Vector3f(0, 0, 0);
-	o2.Scale = Vector3f(1, 1, 1);
-	objectList.push_back(o2);
-
-}
 
 void SetCamera()
 {
@@ -114,34 +90,15 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 	else std::cout << "模型加载失败" << std::endl;
 }
 
-void TestTexture()
-{
-	initgraph(1000, 1000);
-	auto bup = loadBMP("Res/Texture/Gun.bmp");
-
-	for (int x = 0; x < width; x++)
-	{
-		for (int y = 0; y < height; y++)
-		{
-			// 由于窗口y轴正方向向下,此处将y轴反转
-			int realY = (height - y - 1);
-			putpixel(x, y, RGB(bup[x][y].r, bup[x][y].g, bup[x][y].b));
-		}
-	}
-
-	std::cin.get();
-}
-
 int main()
 {
-
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
 
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 	//	new BlinnPhongShader(&light,&camera));
 
-	SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new CartoonShader(&light, &camera,Vector3f(0,1,1)));
+	/*SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+		new CartoonShader(&light, &camera,Vector3f(0,1,1)));*/
 
 	//SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 	//	new TextureShader(&light, &camera, new Texture("Knife")));
@@ -149,8 +106,8 @@ int main()
 	//SetModel("Gun", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 10, 10),
 	//	new TextureShader(&light, &camera, new Texture("Gun")));
 
-	//SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
-	//	new BlinnPhongShader(&light, &camera));
+	/*SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
+		new BlinnPhongShader(&light, &camera));*/
 
 	/*SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
 		new CartoonShader(&light, &camera, Vector3f(0, 1, 1)));*/
@@ -158,11 +115,15 @@ int main()
 	/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
 		new TextureShader(&light, &camera,new Texture("Skull")));*/
 
+	SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
+		new CartoonShader(&light, &camera,Vector3f(1,0,1)));
+
+	/*SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
+		new TextureShader(&light, &camera, new Texture("Spaceship")));*/
+
 	SetLight(); // 设置光照
 
 	SetCamera(); //设置相机
-
-	initgraph(width, height);
 
 	std::thread input(Input);
 
@@ -179,19 +140,12 @@ int main()
 		r.FragmentShader(list);
 
 		//绘制
-		for (int x = 0; x < width; x++)
-		{
-			for (int y = 0; y < height; y++)
-			{
-				// 由于窗口y轴正方向向下,此处将y轴反转
-				int realY = (height - y - 1);
-				putpixel(x, y, RGB(r.GetPixelColor(x, realY).x(),r.GetPixelColor(x, realY).y(),r.GetPixelColor(x, realY).z()));
-			}
-		}
-
+		cv::Mat image(height, width, CV_32FC3, r.GetFrameBuffer().data());
+		image.convertTo(image, CV_8UC3, 1.0f);
+		cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
+		cv::imshow("PurpleFlowerRender", image);
+		cv::waitKey(1);
 		std::cout << "第" << ++frameCount <<"帧" << "\n";
-
 	} while (true);
-
 
 }

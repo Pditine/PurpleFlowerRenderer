@@ -1,5 +1,5 @@
 #pragma once
-#include <easyx.h>
+#include <windows.h>
 #include <Eigen>
 #include <iostream>
 #include <fstream>

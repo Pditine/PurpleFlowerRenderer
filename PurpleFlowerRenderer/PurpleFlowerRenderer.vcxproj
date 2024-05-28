@@ -71,16 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;E:\OpenCV\opencv\build\include\opencv2\;E:\OpenCV\opencv\build\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\OpenCV\opencv\build\x64\vc16\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;E:\OpenCV\opencv\build\include\opencv2\;E:\OpenCV\opencv\build\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\OpenCV\opencv\build\x64\vc16\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;E:\OpenCV\opencv\build\include\opencv2\;E:\OpenCV\opencv\build\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\OpenCV\opencv\build\x64\vc16\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;E:\OpenCV\opencv\build\include\opencv2\;E:\OpenCV\opencv\build\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\OpenCV\opencv\build\x64\vc16\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -94,7 +98,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world490.lib;opencv_world490d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -113,7 +117,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world490.lib;opencv_world490d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -128,7 +132,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world490.lib;opencv_world490d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,7 +151,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world490.lib;opencv_world490d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -157,7 +161,6 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="Macro.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="Renderer.h" />

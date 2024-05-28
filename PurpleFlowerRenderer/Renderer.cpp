@@ -1,5 +1,4 @@
 #include "Renderer.h"
-#include "Macro.h"
 #include "Shader.h"
 
 
@@ -13,6 +12,12 @@ Renderer::Renderer(int w, int h) :_width(w), _height(h)
 		0, 0, 1, 0,
 		0, 0, 0, 1;
 }
+
+std::vector<Vector3f>& Renderer::GetFrameBuffer()
+{
+	return _frameBuffer;
+}
+
 
 void Renderer::Clear()
 {
@@ -31,7 +36,7 @@ void Renderer::SetPixelColor(int x,int y, const Vector3f color)
 	_frameBuffer[ind] = color;
 }
 
-Eigen::Vector3f Renderer::GetPixelColor(int x, int y)
+Eigen::Vector3f& Renderer::GetPixelColor(int x, int y)
 {
 	return _frameBuffer[GetPixelIndex(x, y)];
 }

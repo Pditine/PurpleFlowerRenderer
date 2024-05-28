@@ -1,8 +1,8 @@
 #pragma once
-#include <Eigen>
 #include "Object.h"
 #include "Camera.h"
-#include "Light.h"
+
+constexpr float PI = 3.1415926f;
 
 class Renderer
 {
@@ -18,7 +18,9 @@ private:
 
 public:
 
-	Eigen::Vector3f GetPixelColor(int x,int y); // 获取颜色
+	Eigen::Vector3f& GetPixelColor(int x,int y); // 获取颜色
+
+	std::vector<Vector3f>& GetFrameBuffer();
 
 	Renderer(int w, int h);
 
