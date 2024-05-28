@@ -44,7 +44,7 @@ Eigen::Vector3f& Renderer::GetPixelColor(int x, int y)
 
 int Renderer::GetPixelIndex(int x, int y)
 {
-	return x+y*_width;
+	return x+(_height-y)*_width;
 }
 
 void Renderer::SetModelMatrix(const Object& o)

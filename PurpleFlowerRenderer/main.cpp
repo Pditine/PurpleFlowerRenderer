@@ -115,11 +115,11 @@ int main()
 	/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
 		new TextureShader(&light, &camera,new Texture("Skull")));*/
 
-	SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
-		new CartoonShader(&light, &camera,Vector3f(1,0,1)));
+	//SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
+	//	new NormalShader());
 
-	/*SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
-		new TextureShader(&light, &camera, new Texture("Spaceship")));*/
+	SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
+		new TextureShader(&light, &camera, new Texture("Spaceship")));
 
 	SetLight(); // …Ë÷√π‚’’
 
