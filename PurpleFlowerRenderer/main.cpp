@@ -12,6 +12,7 @@ Light light;
 Camera camera;
 int frameCount = 0;
 bool hasInput = false;
+float inputFloat;
 
 void SetCamera()
 {
@@ -45,6 +46,16 @@ void Input()
 			rotation += Vector3f(0, 1, 0);
 		if (GetAsyncKeyState(VK_RIGHT))
 			rotation += Vector3f(0, -1, 0);
+		if (GetAsyncKeyState(VK_ADD))
+		{
+			inputFloat += 0.01f;
+			std::cout << inputFloat << "\n";
+		}
+		if(GetAsyncKeyState(VK_SUBTRACT))
+		{
+			inputFloat -= 0.01f;
+			std::cout << inputFloat << "\n";
+		}
 
 		for (auto& obj : objectList)
 		{
@@ -94,6 +105,9 @@ int main()
 {
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
 
+	SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+		new DissolveShader(&light,&camera,Vector3f(1,0,0), new Texture("noise"),&inputFloat));
+
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 	//	new BlinnPhongShader(&light,&camera));
 
@@ -118,8 +132,8 @@ int main()
 	//SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
 	//	new NormalShader());
 
-	SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
-		new TextureShader(&light, &camera, new Texture("Spaceship")));
+	/*SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
+		new BlinnPhongShader(&light, &camera));*/
 
 	SetLight(); // ÉèÖÃ¹âÕÕ
 
