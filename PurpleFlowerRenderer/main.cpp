@@ -12,7 +12,8 @@ Light light;
 Camera camera;
 int frameCount = 0;
 bool hasInput = false;
-float inputFloat;
+float inputFloat1;
+float inputFloat2;
 
 void SetCamera()
 {
@@ -34,7 +35,7 @@ void SetLight()
 
 void Input()
 {
-	while(true)
+	while (true)
 	{
 		Vector3f rotation = { 0,0,0 };
 
@@ -47,15 +48,13 @@ void Input()
 		if (GetAsyncKeyState(VK_RIGHT))
 			rotation += Vector3f(0, -1, 0);
 		if (GetAsyncKeyState(VK_ADD))
-		{
-			inputFloat += 0.01f;
-			std::cout << inputFloat << "\n";
-		}
-		if(GetAsyncKeyState(VK_SUBTRACT))
-		{
-			inputFloat -= 0.01f;
-			std::cout << inputFloat << "\n";
-		}
+			inputFloat1 += 0.01f;
+		if (GetAsyncKeyState(VK_SUBTRACT))
+			inputFloat1 -= 0.01f;
+		if (GetAsyncKeyState(VK_HOME))
+			inputFloat2 += 0.1f;
+		if (GetAsyncKeyState(VK_DELETE))
+			inputFloat2 -= 0.1f;
 
 		for (auto& obj : objectList)
 		{
@@ -64,7 +63,6 @@ void Input()
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	}
-		
 }
 
 void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f scale,Shader* shader)
@@ -105,8 +103,8 @@ int main()
 {
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
 
-	SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new DissolveShader(&light,&camera,Vector3f(1,0,0), new Texture("noise"),&inputFloat));
+	/*SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+		new DissolveShader(&light,&camera,Vector3f(1,0,0), new Texture("noise"),&inputFloat1));*/
 
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 	//	new BlinnPhongShader(&light,&camera));
@@ -129,8 +127,11 @@ int main()
 	/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
 		new TextureShader(&light, &camera,new Texture("Skull")));*/
 
-	//SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
-	//	new NormalShader());
+	/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
+		new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("noise"), &inputFloat1,&inputFloat2));*/
+
+	SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
+		new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("ScanningNoise"), &inputFloat1, &inputFloat2));
 
 	/*SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 		new BlinnPhongShader(&light, &camera));*/
@@ -158,8 +159,12 @@ int main()
 		image.convertTo(image, CV_8UC3, 1.0f);
 		cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
 		cv::imshow("PurpleFlowerRender", image);
-		cv::waitKey(1);
+		cv::waitKey(3);
+
+		std::cout << "1ÊäÈë:" << inputFloat1 << "\n";
+		std::cout << "2ÊäÈë:" << inputFloat1 << "\n";
 		std::cout << "µÚ" << ++frameCount <<"Ö¡" << "\n";
+
 	} while (true);
 
 }

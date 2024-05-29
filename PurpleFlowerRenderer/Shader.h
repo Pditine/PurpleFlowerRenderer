@@ -172,10 +172,11 @@ private:
 	Vector3f _lineColor;
 	Texture* _noise;
 	float* _cutValue;
+	float* _lineWidth;
 
 public:
-	DissolveShader(Light* light, Camera* camera,Vector3f lineColor,Texture* noise,float* cutValue) :
-	_light(light), _camera(camera),_lineColor(lineColor),_noise(noise), _cutValue(cutValue) {}
+	DissolveShader(Light* light, Camera* camera,Vector3f lineColor,Texture* noise,float* cutValue,float* lineWidth) :
+	_light(light), _camera(camera),_lineColor(lineColor),_noise(noise), _cutValue(cutValue),_lineWidth(lineWidth) {}
 
 	Vector3f GetColor(const FragmentData& data) override
 	{
@@ -195,13 +196,13 @@ public:
 
 		resultColor += ambient + diffuse + specular;
 
-		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue < 0)
+		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue *255 < 0)
 		{
 			return Vector3f(0,0,0);
 		}
 
-		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue < 0)
-			return _lineColor;
+		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue *255 - *_lineWidth< 0)
+			return _lineColor*255;
 
 		return resultColor * 255.f;
 	}
