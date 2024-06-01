@@ -28,9 +28,9 @@ void SetCamera()
 
 void SetLight()
 {
-	light.Direction = Vector3f(1, 1, -1).normalized();
+	light.Direction = Vector3f(-1, 1, -1).normalized();
 	light.Intensity = 0.8f;
-	light.Color = Vector3f(0.8f,0.8f,0.8f);
+	light.Color = Vector3f(1,1,1);
 }
 
 void Input()
@@ -38,11 +38,12 @@ void Input()
 	while (true)
 	{
 		Vector3f rotation = { 0,0,0 };
-
+		Vector3f position = { 0,0,0 };
+		
 		if (GetAsyncKeyState(VK_UP))
-			rotation += Vector3f(1, 0, 0);
+			position += Vector3f(0, 0, -1);
 		if (GetAsyncKeyState(VK_DOWN))
-			rotation += Vector3f(-1, 0, 0);
+			position += Vector3f(0, 0, 1);
 		if (GetAsyncKeyState(VK_LEFT))
 			rotation += Vector3f(0, 1, 0);
 		if (GetAsyncKeyState(VK_RIGHT))
@@ -60,7 +61,8 @@ void Input()
 		{
 			obj.Rotation += rotation;
 		}
-
+		
+		camera.Position += position;
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	}
 }
@@ -103,11 +105,13 @@ int main()
 {
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
 
-	/*SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new DissolveShader(&light,&camera,Vector3f(1,0,0), new Texture("noise"),&inputFloat1));*/
+		SetModel("bunny", Vector3f(0, -1, 1), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+		new BlinnPhongShader(&light, &camera));
 
-	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-	//	new BlinnPhongShader(&light,&camera));
+	SetModel("table", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(0.03f, 0.03f, 0.03f),
+		new BlinnPhongShader(&light, &camera));
+
+
 
 	/*SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 		new CartoonShader(&light, &camera,Vector3f(0,1,1)));*/
@@ -128,10 +132,12 @@ int main()
 		new TextureShader(&light, &camera,new Texture("Skull")));*/
 
 	/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
-		new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("noise"), &inputFloat1,&inputFloat2));*/
+		new DissolveShader(&light, &camera, Vector3f(1, 0, 0),
+			new Texture("noise"), &inputFloat1,&inputFloat2));*/
 
-	SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
-		new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("ScanningNoise"), &inputFloat1, &inputFloat2));
+	/*SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
+		new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("ScanningNoise"), 
+			&inputFloat1, &inputFloat2));*/
 
 	/*SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 		new BlinnPhongShader(&light, &camera));*/
@@ -159,10 +165,10 @@ int main()
 		image.convertTo(image, CV_8UC3, 1.0f);
 		cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
 		cv::imshow("PurpleFlowerRender", image);
-		cv::waitKey(3);
+		cv::waitKey(20);
 
 		std::cout << "1输入:" << inputFloat1 << "\n";
-		std::cout << "2输入:" << inputFloat1 << "\n";
+		std::cout << "2输入:" << inputFloat2 << "\n";
 		std::cout << "第" << ++frameCount <<"帧" << "\n";
 
 	} while (true);

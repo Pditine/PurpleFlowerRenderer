@@ -44,7 +44,7 @@ Eigen::Vector3f& Renderer::GetPixelColor(int x, int y)
 
 int Renderer::GetPixelIndex(int x, int y)
 {
-	return x+(_height-y)*_width;
+	return x+(_height-y-1)*_width;
 }
 
 void Renderer::SetModelMatrix(const Object& o)
@@ -285,7 +285,7 @@ void Renderer::FragmentShader(std::vector<Object>& objects)
 				for (int x = minX; x < maxX; ++x)
 				{
 					//判断像素是否在三角形内
-					if (InsideTriangle((float)x + 0.5, (float)y + 0.5, t))
+					if (InsideTriangle((float)x + 0.5f, (float)y + 0.5f, t))
 					{
 						//在的话计算2D重心坐标
 						float alpha2D, beta2D, gamma2D;
