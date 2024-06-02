@@ -31,6 +31,7 @@ void SetLight()
 	light.Direction = Vector3f(-1, 1, -1).normalized();
 	light.Intensity = 0.8f;
 	light.Color = Vector3f(1,1,1);
+	light.ShadowMap.resize(height * width);
 }
 
 void Input()
@@ -78,7 +79,7 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 		{
 			Object* o = new Object();
 			
-			for (int i = 0; i < mesh.Indices.size()-3; i += 3)
+			for (int i = 0; i < mesh.Indices.size()-2; i += 3)
 			{
 				Triangle* t = new Triangle();
 				for (int j = 0; j < 3; j++)
@@ -103,18 +104,17 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 
 int main()
 {
+
+	SetModel("table", Vector3f(0, -4, 0), Vector3f(0, 90, 0), Vector3f(0.05f, 0.03f, 0.05f),
+		new BlinnPhongShader(&light, &camera));
+
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
 
-		SetModel("bunny", Vector3f(0, -1, 1), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new BlinnPhongShader(&light, &camera));
+	//SetModel("bunny", Vector3f(0, -3, 1), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+	//	new BlinnPhongShader(&light, &camera));
 
-	SetModel("table", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(0.03f, 0.03f, 0.03f),
-		new BlinnPhongShader(&light, &camera));
-
-
-
-	/*SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new CartoonShader(&light, &camera,Vector3f(0,1,1)));*/
+	SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+		new CartoonShader(&light, &camera,Vector3f(0,1,1)));
 
 	//SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 	//	new TextureShader(&light, &camera, new Texture("Knife")));
@@ -131,16 +131,16 @@ int main()
 	/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
 		new TextureShader(&light, &camera,new Texture("Skull")));*/
 
-	/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
-		new DissolveShader(&light, &camera, Vector3f(1, 0, 0),
-			new Texture("noise"), &inputFloat1,&inputFloat2));*/
+	//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
+	//	new DissolveShader(&light, &camera, Vector3f(1, 0, 0),
+	//		new Texture("noise"), &inputFloat1,&inputFloat2));
 
 	/*SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
 		new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("ScanningNoise"), 
 			&inputFloat1, &inputFloat2));*/
 
-	/*SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
-		new BlinnPhongShader(&light, &camera));*/
+	//SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
+	//	new BlinnPhongShader(&light, &camera));
 
 	SetLight(); // ÉèÖÃ¹âÕÕ
 

@@ -36,7 +36,7 @@ public:
 
 	void SetClipMatrix(const Camera& c);
 
-	void VertexShader(std::vector<Object>& objectList, Camera c);
+	void VertexShader(std::vector<Object>& objectList, Camera& c);
 
 	static bool InsideTriangle(const float x, const float y, const Triangle& t); // 点是否在三角形中
 

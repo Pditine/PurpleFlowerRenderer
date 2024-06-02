@@ -110,38 +110,21 @@ void Renderer::SetViewMatrix(const Camera& c)
 
 void Renderer::SetClipMatrix(const Camera& c)
 {
-	//透视投影矩阵
-	Matrix4f p2o; //将梯台状透视视锥挤成长方体正交投影
-	Matrix4f orthoTrans, orthoScale, ortho; //正交投影矩阵的平移和缩放分解
-	float nearClipPlaneHeight, nearClipPlaneWidth;
-	float radFov; //视野的弧度制
+	float radFov;
+
+	Matrix4f frustum;
 
 	radFov = ToRadian(c.Fov);
-	nearClipPlaneHeight = tan(radFov / 2) * c.Near;
-	nearClipPlaneWidth = c.AspectRatio * nearClipPlaneHeight;
 
-	p2o << c.Near, 0, 0, 0,
-		0, c.Near, 0, 0,
-		0, 0, c.Far + c.Near, c.Near* c.Far,
+	frustum << 1 / (c.AspectRatio * tan(radFov / 2)), 0, 0, 0,
+		0, 1 / tan(radFov / 2), 0, 0,
+		0, 0, -(c.Far + c.Near) / (c.Far - c.Near), -(2 * c.Far * c.Near) / (c.Far - c.Near),
 		0, 0, -1, 0;
 
-	orthoTrans << 1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, (c.Near + c.Far) / 2,
-		0, 0, 0, 1;
-
-	orthoScale << 1 / nearClipPlaneWidth, 0, 0, 0,
-		0, 1 / nearClipPlaneHeight, 0, 0,
-		0, 0, 2 / (c.Far - c.Near), 0,
-		0, 0, 0, 1;
-
-	ortho = orthoScale * orthoTrans;
-
-	//矩阵左乘计算出透视投影矩阵
-	_clipMatrix = ortho * p2o;
+	_clipMatrix = frustum;
 }
 
-void Renderer::VertexShader(std::vector<Object>& objectList, Camera c)
+void Renderer::VertexShader(std::vector<Object>& objectList, Camera& c)
 {
 	//对于每个物体
 	for (Object& object : objectList)
