@@ -9,14 +9,16 @@ class Renderer
 private:
 	int _width, _height;
 
-	Matrix4f _modelMatrix, _viewMatrix, _clipMatrix;
-	Matrix4f _mvp;
+	/*Matrix4f _modelMatrix, _viewMatrix, _clipMatrix;
+	Matrix4f _mvp;*/
 	Matrix4f _viewport;
 
 	std::vector<Vector3f> _frameBuffer;
 	std::vector<float> _zBuffer;
 
 public:
+
+	std::vector<float>& GetZBuffer();
 
 	Eigen::Vector3f& GetPixelColor(int x,int y); // 获取颜色
 
@@ -30,11 +32,11 @@ public:
 
 	int GetPixelIndex(int x, int y); // 获取像素索引
 
-	void SetModelMatrix(const Object& o);
+	static Matrix4f GetModelMatrix(const Object& o);
 
-	void SetViewMatrix(const Camera& c);
+	static Matrix4f GetViewMatrix(const Camera& c);
 
-	void SetClipMatrix(const Camera& c);
+	static Matrix4f GetClipMatrix(const Camera& c);
 
 	void VertexShader(std::vector<Object>& objectList, Camera& c);
 

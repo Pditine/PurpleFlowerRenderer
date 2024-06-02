@@ -13,6 +13,12 @@ Renderer::Renderer(int w, int h) :_width(w), _height(h)
 		0, 0, 0, 1;
 }
 
+std::vector<float>& Renderer::GetZBuffer()
+{
+	return _zBuffer;
+}
+
+
 std::vector<Vector3f>& Renderer::GetFrameBuffer()
 {
 	return _frameBuffer;
@@ -47,7 +53,7 @@ int Renderer::GetPixelIndex(int x, int y)
 	return x+(_height-y-1)*_width;
 }
 
-void Renderer::SetModelMatrix(const Object& o)
+Matrix4f Renderer::GetModelMatrix(const Object& o)
 {
 	Matrix4f rX, rY, rZ;
 	float radX, radY, radZ;
@@ -83,10 +89,10 @@ void Renderer::SetModelMatrix(const Object& o)
 		0, 0, 1, o.Position.z(),
 		0, 0, 0, 1;
 
-	_modelMatrix = move * rZ * rX * rY * scale;
+	return move * rZ * rX * rY * scale;
 }
 
-void Renderer::SetViewMatrix(const Camera& c)
+Matrix4f Renderer::GetViewMatrix(const Camera& c)
 {
 	//将摄像机移动到原点，然后使用旋转矩阵的正交性让摄像机摆正
 	Matrix4f move; //移动矩阵
@@ -105,13 +111,12 @@ void Renderer::SetViewMatrix(const Camera& c)
 		-c.Direction.x(), -c.Direction.y(), -c.Direction.z(), 0,
 		0, 0, 0, 1;
 
-	_viewMatrix = rotateT * move;
+	return rotateT * move;
 }
 
-void Renderer::SetClipMatrix(const Camera& c)
+Matrix4f Renderer::GetClipMatrix(const Camera& c)
 {
 	float radFov;
-
 	Matrix4f frustum;
 
 	radFov = ToRadian(c.Fov);
@@ -121,19 +126,17 @@ void Renderer::SetClipMatrix(const Camera& c)
 		0, 0, -(c.Far + c.Near) / (c.Far - c.Near), -(2 * c.Far * c.Near) / (c.Far - c.Near),
 		0, 0, -1, 0;
 
-	_clipMatrix = frustum;
+	return frustum;
 }
 
 void Renderer::VertexShader(std::vector<Object>& objectList, Camera& c)
 {
+	Matrix4f mvp;
 	//对于每个物体
 	for (Object& object : objectList)
 	{
 		//计算MVP矩阵
-		SetModelMatrix(object);
-		SetViewMatrix(c);
-		SetClipMatrix(c);
-		_mvp = _clipMatrix * _viewMatrix * _modelMatrix;
+		mvp = GetClipMatrix(c) * GetViewMatrix(c) * GetModelMatrix(object);
 
 		//对于物体中的每个三角形
 		for (Triangle& t : object.Mesh)
@@ -142,7 +145,7 @@ void Renderer::VertexShader(std::vector<Object>& objectList, Camera& c)
 			for (auto& vec : t.vertex)
 			{
 				//变换
-				vec = _mvp * vec; // 转换到裁剪空间
+				vec = mvp * vec; // 转换到裁剪空间
 				vec = _viewport * vec; // 转换到屏幕空间
 
 				//齐次坐标归一化
@@ -287,7 +290,7 @@ void Renderer::FragmentShader(std::vector<Object>& objects)
 							Vector2f interpolateUV = Interpolate(alpha2D, beta2D, gamma2D, t.uv[0], t.uv[1], t.uv[2]);
 
 							//使用shader处理着色
-							Vector3f pixelColor = object.Shader->GetColor({interpolateColor,(_modelMatrix*interpolateNormal).normalized(),interpolateUV });
+							Vector3f pixelColor = object.Shader->GetColor({ &object,interpolateColor,(GetModelMatrix(object)*interpolateNormal).normalized(),interpolateUV });
 							SetPixelColor(x, y, pixelColor);
 
 							_zBuffer[GetPixelIndex(x, y)] = theZ;

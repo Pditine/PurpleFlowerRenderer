@@ -105,16 +105,17 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 int main()
 {
 
-	SetModel("table", Vector3f(0, -4, 0), Vector3f(0, 90, 0), Vector3f(0.05f, 0.03f, 0.05f),
-		new BlinnPhongShader(&light, &camera));
 
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
 
-	//SetModel("bunny", Vector3f(0, -3, 1), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-	//	new BlinnPhongShader(&light, &camera));
+	/*SetModel("bunny", Vector3f(0, -3, 1), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+		new BlinnPhongShader(&light, &camera));*/
 
-	SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new CartoonShader(&light, &camera,Vector3f(0,1,1)));
+	SetModel("table", Vector3f(0, -4, 0), Vector3f(0, 90, 0), Vector3f(0.05f, 0.03f, 0.05f),
+		new NormalShader());
+
+	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+	//	new CartoonShader(&light, &camera,Vector3f(0,1,1)));
 
 	//SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 	//	new TextureShader(&light, &camera, new Texture("Knife")));
@@ -165,12 +166,13 @@ int main()
 		image.convertTo(image, CV_8UC3, 1.0f);
 		cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
 		cv::imshow("PurpleFlowerRender", image);
-		cv::waitKey(20);
+		int key = cv::waitKey(1);
 
 		std::cout << "1ÊäÈë:" << inputFloat1 << "\n";
 		std::cout << "2ÊäÈë:" << inputFloat2 << "\n";
 		std::cout << "µÚ" << ++frameCount <<"Ö¡" << "\n";
 
+		if (key == 27)break;
 	} while (true);
 
 }

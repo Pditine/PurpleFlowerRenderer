@@ -4,10 +4,14 @@
 #include "Camera.h"
 #include "iostream"
 #include "Texture.h"
+
+struct Object;
+
 using namespace Eigen;
 
 struct FragmentData
 {
+	Object* object;
 	Vector3f color;
 	Vector4f normal;
 	Vector2f uv;
@@ -203,6 +207,44 @@ public:
 
 		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue *255 - *_lineWidth< 0)
 			return _lineColor*255;
+
+		return resultColor * 255.f;
+	}
+};
+
+inline float CalculateZForLight(FragmentData data,Light& light,int x,int y)
+{
+	
+}
+
+class ShadowCastShader : public Shader
+{
+private:
+	Light* _light;
+	Camera* _camera;
+
+public:
+	ShadowCastShader(Light* light, Camera* camera) : _light(light), _camera(camera){}
+
+	Vector3f GetColor(const FragmentData& data) override
+	{
+		Vector3f worldNormal = Vector3f(data.normal.x(), data.normal.y(), data.normal.z());
+
+		Vector3f resultColor = Vector3f(0, 0, 0);
+
+		float halfLambert = (worldNormal.dot(_light->Direction) + 1) / 2;
+
+		Vector3f diffuse = BlendColor(_light->Color * _light->Intensity, data.color, 0.3f) * halfLambert;
+
+		Vector3f ambient = Vector3f(0.05f, 0.05f, 0.05f);
+
+		Vector3f halfDirection = (_camera->Direction + _light->Direction).normalized();
+
+		Vector3f specular = BlendColor(_light->Color, Vector3f(1, 1, 1)) * pow(Clamp(halfDirection.dot(worldNormal)), 50) * _light->Intensity;
+
+		
+
+		resultColor += ambient + diffuse + specular;
 
 		return resultColor * 255.f;
 	}
