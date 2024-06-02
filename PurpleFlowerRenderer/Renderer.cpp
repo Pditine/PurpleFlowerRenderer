@@ -282,15 +282,16 @@ void Renderer::FragmentShader(std::vector<Object>& objects)
 						//判断深度值
 						if (_zBuffer[GetPixelIndex(x, y)] > theZ)
 						{
-							//插值颜色，更新深度信息
 							Vector3f interpolateColor = Interpolate(alpha2D, beta2D, gamma2D, t.color[0], t.color[1], t.color[2]);
 
 							Vector4f interpolateNormal = Interpolate(alpha2D, beta2D, gamma2D, t.normal[0], t.normal[1], t.normal[2]);
 
 							Vector2f interpolateUV = Interpolate(alpha2D, beta2D, gamma2D, t.uv[0], t.uv[1], t.uv[2]);
 
+							Vector4f interpolatePos = Interpolate(alpha2D, beta2D, gamma2D, t.vertex[0], t.vertex[1], t.vertex[2]);
+
 							//使用shader处理着色
-							Vector3f pixelColor = object.Shader->GetColor({ &object,interpolateColor,(GetModelMatrix(object)*interpolateNormal).normalized(),interpolateUV });
+							Vector3f pixelColor = object.Shader->GetColor({ &object,interpolatePos,interpolateColor,(GetModelMatrix(object)*interpolateNormal).normalized(),interpolateUV });
 							SetPixelColor(x, y, pixelColor);
 
 							_zBuffer[GetPixelIndex(x, y)] = theZ;

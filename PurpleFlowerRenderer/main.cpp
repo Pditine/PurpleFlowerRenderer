@@ -17,7 +17,7 @@ float inputFloat2;
 
 void SetCamera()
 {
-	camera.Position = Vector3f(0, 0, 10);
+	camera.Position = Vector4f(0, 0, 10,1);
 	camera.Direction = Vector3f(0, 0, -1).normalized();
 	camera.Up = Vector3f(0, 1, 0).normalized();
 	camera.Fov = 60.f;
@@ -29,6 +29,7 @@ void SetCamera()
 void SetLight()
 {
 	light.Direction = Vector3f(-1, 1, -1).normalized();
+	light.Position =  Vector4f(2,-2,2,1);
 	light.Intensity = 0.8f;
 	light.Color = Vector3f(1,1,1);
 	light.ShadowMap.resize(height * width);
@@ -39,12 +40,12 @@ void Input()
 	while (true)
 	{
 		Vector3f rotation = { 0,0,0 };
-		Vector3f position = { 0,0,0 };
+		Vector4f position = { 0,0,0,0 };
 		
 		if (GetAsyncKeyState(VK_UP))
-			position += Vector3f(0, 0, -1);
+			position += Vector4f(0, 0, -1,1);
 		if (GetAsyncKeyState(VK_DOWN))
-			position += Vector3f(0, 0, 1);
+			position += Vector4f(0, 0, 1,1);
 		if (GetAsyncKeyState(VK_LEFT))
 			rotation += Vector3f(0, 1, 0);
 		if (GetAsyncKeyState(VK_RIGHT))
@@ -85,7 +86,7 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 				for (int j = 0; j < 3; j++)
 				{
 					t->SetVertex(j, Vector3f(mesh.Vertices[mesh.Indices[i+j]].Position.X, mesh.Vertices[mesh.Indices[i + j]].Position.Y, mesh.Vertices[mesh.Indices[i + j]].Position.Z));
-					t->SetColor(j, Vector3f(0.5f, 0.5f, 0.5f));
+					t->SetColor(j, Vector3f(0.8f, 0.8f, 0.8f));
 					t->SetNormal(j, Vector4f(mesh.Vertices[mesh.Indices[i + j]].Normal.X, mesh.Vertices[mesh.Indices[i + j]].Normal.Y, mesh.Vertices[mesh.Indices[i + j]].Normal.Z,1));
 					t->SetUV(j, Vector2f(mesh.Vertices[mesh.Indices[i + j]].TextureCoordinate.X, mesh.Vertices[mesh.Indices[i + j]].TextureCoordinate.Y));
 				}
@@ -111,11 +112,8 @@ int main()
 	/*SetModel("bunny", Vector3f(0, -3, 1), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 		new BlinnPhongShader(&light, &camera));*/
 
-	SetModel("table", Vector3f(0, -4, 0), Vector3f(0, 90, 0), Vector3f(0.05f, 0.03f, 0.05f),
-		new NormalShader());
-
-	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-	//	new CartoonShader(&light, &camera,Vector3f(0,1,1)));
+	SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+		new CartoonShader(&light, &camera,Vector3f(0,1,1)));
 
 	//SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 	//	new TextureShader(&light, &camera, new Texture("Knife")));
@@ -143,7 +141,11 @@ int main()
 	//SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 	//	new BlinnPhongShader(&light, &camera));
 
+	SetModel("Table", Vector3f(0, -6, 0), Vector3f(0, 0, 0), Vector3f(3, 3, 3),
+		new BlinnPhongShader(&light, &camera));
+
 	SetLight(); // 设置光照
+	light.SetShadowMap(objectList, 500, 500);
 
 	SetCamera(); //设置相机
 

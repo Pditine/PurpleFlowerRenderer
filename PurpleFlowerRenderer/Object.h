@@ -1,6 +1,7 @@
 #pragma once
 #include "Triangle.h"
-#include "Shader.h"
+
+class Shader;
 
 struct Object
 {

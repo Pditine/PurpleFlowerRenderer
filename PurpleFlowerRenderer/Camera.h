@@ -3,7 +3,7 @@
 using namespace Eigen;
 struct Camera
 {
-	Vector3f Position;
+	Vector4f Position;
 	Vector3f Up;
 	Vector3f Direction;
 	float Fov;

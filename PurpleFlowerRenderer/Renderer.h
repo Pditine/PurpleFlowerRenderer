@@ -50,7 +50,7 @@ public:
 
 	static Vector4f Interpolate(float alpha, float beta, float gamma, const Vector4f& vert1, const Vector4f& vert2, const Vector4f& vert3);
 
-	float Interpolate(float alpha, float beta, float gamma, const float& vert1, const float& vert2, const float& vert3); // 通过重心坐标插值
+	static float Interpolate(float alpha, float beta, float gamma, const float& vert1, const float& vert2, const float& vert3); // 通过重心坐标插值
 
 	void SetPixelColor(int x,int y, const Vector3f color); // 使颜色存入帧缓冲
 

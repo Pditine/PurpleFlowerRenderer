@@ -12,6 +12,7 @@ using namespace Eigen;
 struct FragmentData
 {
 	Object* object;
+	Vector4f pos;
 	Vector3f color;
 	Vector4f normal;
 	Vector2f uv;
@@ -212,19 +213,14 @@ public:
 	}
 };
 
-inline float CalculateZForLight(FragmentData data,Light& light,int x,int y)
-{
-	
-}
-
-class ShadowCastShader : public Shader
+class ShadowShader : public Shader
 {
 private:
 	Light* _light;
 	Camera* _camera;
 
 public:
-	ShadowCastShader(Light* light, Camera* camera) : _light(light), _camera(camera){}
+	ShadowShader(Light* light, Camera* camera) : _light(light), _camera(camera){}
 
 	Vector3f GetColor(const FragmentData& data) override
 	{
@@ -242,7 +238,7 @@ public:
 
 		Vector3f specular = BlendColor(_light->Color, Vector3f(1, 1, 1)) * pow(Clamp(halfDirection.dot(worldNormal)), 50) * _light->Intensity;
 
-		
+
 
 		resultColor += ambient + diffuse + specular;
 
