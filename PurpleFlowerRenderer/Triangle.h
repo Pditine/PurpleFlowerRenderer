@@ -6,6 +6,7 @@ class Triangle
 {
 public:
 	Vector4f vertex[3];
+	Vector4f worldVertex[3];
 	Vector4f normal[3];
 	Vector2f uv[3];
 	Vector3f color[3];

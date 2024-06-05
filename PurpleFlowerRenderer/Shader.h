@@ -12,7 +12,8 @@ using namespace Eigen;
 struct FragmentData
 {
 	Object* object;
-	Vector4f pos;
+	Vector4f viewportPos;
+	Vector4f worldPos;
 	Vector3f color;
 	Vector4f normal;
 	Vector2f uv;
@@ -27,6 +28,14 @@ public:
 		return data.color*255.0f;
 	}
 
+};
+
+class NullShader : public Shader
+{
+	Vector3f GetColor(const FragmentData& data) override
+	{
+		return data.color*255.0f;
+	}
 };
 
 class NormalShader : public Shader
@@ -218,9 +227,8 @@ class ShadowShader : public Shader
 private:
 	Light* _light;
 	Camera* _camera;
-
 public:
-	ShadowShader(Light* light, Camera* camera) : _light(light), _camera(camera){}
+	ShadowShader(Light* light, Camera* camera) : _light(light), _camera(camera) { }
 
 	Vector3f GetColor(const FragmentData& data) override
 	{
@@ -230,7 +238,7 @@ public:
 
 		float halfLambert = (worldNormal.dot(_light->Direction) + 1) / 2;
 
-		Vector3f diffuse = BlendColor(_light->Color * _light->Intensity, data.color, 0.3f) * halfLambert;
+		Vector3f diffuse = BlendColor(_light->Color * _light->Intensity, data.color, 0.5f) * halfLambert;
 
 		Vector3f ambient = Vector3f(0.05f, 0.05f, 0.05f);
 
@@ -238,7 +246,35 @@ public:
 
 		Vector3f specular = BlendColor(_light->Color, Vector3f(1, 1, 1)) * pow(Clamp(halfDirection.dot(worldNormal)), 50) * _light->Intensity;
 
+		Camera virtualCamera = _light->VirtualCamera;
 
+		Vector4f worldPos = data.worldPos;
+
+		Matrix4f lightViewport;
+		lightViewport << _light->ShadowMapWidth / 2, 0, 0, _light->ShadowMapWidth / 2,
+			0, _light->ShadowMapHeight / 2, 0, _light->ShadowMapHeight / 2,
+			0, 0, 1, 0,
+			0, 0, 0, 1;
+
+		Vector4f lightViewportPos = lightViewport * Renderer::GetClipMatrix(virtualCamera) * Renderer::GetViewMatrix(virtualCamera)*worldPos;
+
+		lightViewportPos.x() /= lightViewportPos.w();
+		lightViewportPos.y() /= lightViewportPos.w();
+		lightViewportPos.z() /= lightViewportPos.w();
+		lightViewportPos.w() /= lightViewportPos.w();
+
+		int x = floor(lightViewportPos.x());
+		int y = floor(lightViewportPos.y());
+
+		if (x >= 0 && x < _light->ShadowMapWidth &&
+			y >= 0 && y < _light->ShadowMapHeight && 
+			_light->ShadowMap[x + (_light->ShadowMapHeight - y - 1) * _light->ShadowMapWidth]!= std::numeric_limits<float>::infinity())
+			if(lightViewportPos.z()> (_light->ShadowMap[x + (_light->ShadowMapHeight - y - 1) * _light->ShadowMapWidth])+0.0025f)
+			{
+				//std::cout <<lightViewportPos.z()<<":" << _light->ShadowMap[lightViewportPos.x() + (_light->ShadowMapHeight - lightViewportPos.y() - 1) * _light->ShadowMapWidth] << "\n";
+				specular = Vector3f(0, 0, 0);
+				diffuse = Vector3f(0, 0, 0);
+			}
 
 		resultColor += ambient + diffuse + specular;
 

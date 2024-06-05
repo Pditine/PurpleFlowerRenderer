@@ -13,6 +13,12 @@ Renderer::Renderer(int w, int h) :_width(w), _height(h)
 		0, 0, 0, 1;
 }
 
+Matrix4f Renderer::GetViewport()
+{
+	return _viewport;
+}
+
+
 std::vector<float>& Renderer::GetZBuffer()
 {
 	return _zBuffer;
@@ -141,6 +147,11 @@ void Renderer::VertexShader(std::vector<Object>& objectList, Camera& c)
 		//对于物体中的每个三角形
 		for (Triangle& t : object.Mesh)
 		{
+			for(int i = 0;i<3;i++)
+			{
+				t.worldVertex[i] = GetModelMatrix(object)* t.vertex[i];
+			}
+
 			//对于三角形的每个顶点
 			for (auto& vec : t.vertex)
 			{
@@ -154,6 +165,7 @@ void Renderer::VertexShader(std::vector<Object>& objectList, Camera& c)
 				vec.z() /= vec.w();
 				vec.w() /= vec.w();
 			}
+
 		}
 	}
 	return;
@@ -288,12 +300,13 @@ void Renderer::FragmentShader(std::vector<Object>& objects)
 
 							Vector2f interpolateUV = Interpolate(alpha2D, beta2D, gamma2D, t.uv[0], t.uv[1], t.uv[2]);
 
-							Vector4f interpolatePos = Interpolate(alpha2D, beta2D, gamma2D, t.vertex[0], t.vertex[1], t.vertex[2]);
+							Vector4f interpolateViewportPos = Interpolate(alpha2D, beta2D, gamma2D, t.vertex[0], t.vertex[1], t.vertex[2]);
+
+							Vector4f interpolateWorldPos = Interpolate(alpha2D, beta2D, gamma2D, t.worldVertex[0], t.worldVertex[1], t.worldVertex[2]);
 
 							//使用shader处理着色
-							Vector3f pixelColor = object.Shader->GetColor({ &object,interpolatePos,interpolateColor,(GetModelMatrix(object)*interpolateNormal).normalized(),interpolateUV });
+							Vector3f pixelColor = object.Shader->GetColor({ &object,interpolateViewportPos,interpolateWorldPos,interpolateColor,(GetModelMatrix(object)*interpolateNormal).normalized(),interpolateUV });
 							SetPixelColor(x, y, pixelColor);
-
 							_zBuffer[GetPixelIndex(x, y)] = theZ;
 						}
 					}

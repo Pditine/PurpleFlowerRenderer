@@ -9,14 +9,14 @@ class Renderer
 private:
 	int _width, _height;
 
-	/*Matrix4f _modelMatrix, _viewMatrix, _clipMatrix;
-	Matrix4f _mvp;*/
 	Matrix4f _viewport;
 
 	std::vector<Vector3f> _frameBuffer;
 	std::vector<float> _zBuffer;
 
 public:
+
+	Matrix4f GetViewport();
 
 	std::vector<float>& GetZBuffer();
 

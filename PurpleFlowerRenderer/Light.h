@@ -1,5 +1,7 @@
 #pragma once
 #include <Eigen>
+#include <iostream>
+#include "opencv2/opencv.hpp"
 #include "Object.h"
 #include <vector>
 #include "Renderer.h"
@@ -12,22 +14,39 @@ struct Light
 	float Intensity;
 	Vector4f Position;
 
+	int ShadowMapWidth;
+	int ShadowMapHeight;
+	Camera VirtualCamera;
+	
 	std::vector<float> ShadowMap;
 
-	void SetShadowMap(std::vector<Object>& objList,int width,int height)
+	void SetShadowMap(std::vector<Object>& theObjList,int width,int height)
 	{
 		ShadowMap.reserve(width * height);
+		std::fill(ShadowMap.begin(), ShadowMap.end(), std::numeric_limits<float>::infinity());
+
+		ShadowMapWidth = width;
+		ShadowMapHeight = height;
+
+		std::vector<Object> objList = theObjList;
 
 		Renderer r = Renderer(width, height);
-		Camera camera;
-		camera.Position = Position;
-		camera.Direction = Direction;
-		camera.Up = Vector3f(0, 1, 0).normalized();
-		camera.Fov = 60.f;
-		camera.Near = 0.1f;
-		camera.Far = 60.f;
-		camera.AspectRatio = width/height;
-		r.VertexShader(objList, camera);
+
+		VirtualCamera.Position = Position;
+		VirtualCamera.Direction = Direction;
+
+		Matrix3f rotation;
+		rotation<< 0, 1, 0,
+			0, 0, -1,
+			1, 0, 0;
+
+		VirtualCamera.Up = rotation *Direction;
+		VirtualCamera.Fov = 60.f;
+		VirtualCamera.Near = 0.1f;
+		VirtualCamera.Far = 60.f;
+		VirtualCamera.AspectRatio = width/height;
+
+		r.VertexShader(objList, VirtualCamera);
 
 		for (Object& object : objList)
 		{
@@ -72,14 +91,25 @@ struct Light
 							std::tie(alpha2D, beta2D, gamma2D) = Renderer::Barycentric((float)x + 0.5f, (float)y + 0.5f, t.vertex);
 
 							float theZ = Renderer::Interpolate(alpha2D, beta2D, gamma2D, t.vertex[0].z(), t.vertex[1].z(), t.vertex[2].z());
-
+							
 							//ÅÐ¶ÏÉî¶ÈÖµ
-							if (ShadowMap[r.GetPixelIndex(x, y)] > theZ)
-								ShadowMap[r.GetPixelIndex(x, y)] = theZ;
+							if (ShadowMap[x + (ShadowMapHeight - y - 1) * ShadowMapWidth] > theZ)
+							{
+								ShadowMap[x + (ShadowMapHeight - y - 1) * ShadowMapWidth] = theZ;
+
+								float num = pow(theZ,40);
+								r.GetFrameBuffer()[x + (ShadowMapHeight - y - 1) * ShadowMapWidth] = Vector3f(num, num, num) * 255.0f;
+							}
 						}
 					}
 				}
 			}
 		}
+
+		cv::Mat image(height, width, CV_32FC3, r.GetFrameBuffer().data());
+		image.convertTo(image, CV_8UC3, 1.0f);
+		cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
+		cv::imshow("light_z", image);
+		int key = cv::waitKey(1);
 	}
 };
