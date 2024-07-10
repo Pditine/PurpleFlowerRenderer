@@ -71,19 +71,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;E:\OpenCV\opencv\build\include\opencv2\;E:\OpenCV\opencv\build\include\;C:\Development\DevelopingTool\OpenCV\opencv\build\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\glfw-3.4\include\GLFW;C:\Development\DevelopingTool\OpenCV\opencv\build\include;$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;E:\OpenCV\opencv\build\x64\vc16\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\bin</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;E:\OpenCV\opencv\build\include\opencv2\;E:\OpenCV\opencv\build\include\;C:\Development\DevelopingTool\OpenCV\opencv\build\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\glfw-3.4\include\GLFW;C:\Development\DevelopingTool\OpenCV\opencv\build\include;$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;E:\OpenCV\opencv\build\x64\vc16\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\bin</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;E:\OpenCV\opencv\build\include\opencv2\;E:\OpenCV\opencv\build\include\;C:\Development\DevelopingTool\OpenCV\opencv\build\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\glfw-3.4\include\GLFW;C:\Development\DevelopingTool\OpenCV\opencv\build\include;$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;E:\OpenCV\opencv\build\x64\vc16\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\bin</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen\;E:\OpenCV\opencv\build\include\opencv2\;E:\OpenCV\opencv\build\include\;C:\Development\DevelopingTool\OpenCV\opencv\build\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)PurpleFlowerRenderer\Dependencies\glfw-3.4\include\GLFW;C:\Development\DevelopingTool\OpenCV\opencv\build\include;$(SolutionDir)PurpleFlowerRenderer\Dependencies\Eigen;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;E:\OpenCV\opencv\build\x64\vc16\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\lib;C:\Development\DevelopingTool\OpenCV\opencv\build\x64\vc16\bin</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -96,9 +96,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world4100.lib;opencv_world4100d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)PurpleFlowerRenderer\Dependencies\glfw-3.4\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;opencv_world4100.lib;opencv_world4100d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,9 +114,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world4100.lib;opencv_world4100d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)PurpleFlowerRenderer\Dependencies\glfw-3.4\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;opencv_world4100.lib;opencv_world4100d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -130,9 +128,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world4100.lib;opencv_world4100d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)PurpleFlowerRenderer\Dependencies\glfw-3.4\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;opencv_world4100.lib;opencv_world4100d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,9 +146,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world4100.lib;opencv_world4100d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)PurpleFlowerRenderer\Dependencies\glfw-3.4\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;opencv_world4100.lib;opencv_world4100d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

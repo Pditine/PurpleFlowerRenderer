@@ -25,7 +25,7 @@ public:
 
 	virtual Vector3f GetColor(const FragmentData& data)
 	{
-		return data.color*255.0f;
+		return data.color;
 	}
 
 };
@@ -34,7 +34,7 @@ class NullShader : public Shader
 {
 	Vector3f GetColor(const FragmentData& data) override
 	{
-		return data.color*255.0f;
+		return data.color;
 	}
 };
 
@@ -46,7 +46,7 @@ public:
 	{
 		Vector3f worldNormal = Vector3f(data.normal.x(), data.normal.y(), data.normal.z());
 		Vector3f returnColor = (worldNormal + Vector3f(1.0f, 1.0f, 1.0f)) / 2.0f;
-		return returnColor * 255.0f;
+		return returnColor;
 	}
 };
 
@@ -98,7 +98,7 @@ public:
 
 		resultColor += ambient+ diffuse + specular;
 
-		return resultColor*255.f;
+		return resultColor;
 	}
 };
 
@@ -133,7 +133,7 @@ public:
 
 		resultColor += ambient + diffuse + specular;
 
-		return resultColor * 255.f;
+		return resultColor;
 	}
 };
 
@@ -174,7 +174,7 @@ public:
 		else if (num > 0.4f) returnColor = _baseColor*0.6f;
 		else if (num > 0.2f) returnColor = _baseColor*0.4f;
 
-		return returnColor * 255.f;
+		return returnColor;
 	}
 };
 
@@ -218,7 +218,7 @@ public:
 		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue *255 - *_lineWidth< 0)
 			return _lineColor*255;
 
-		return resultColor * 255.f;
+		return resultColor;
 	}
 };
 
@@ -278,6 +278,6 @@ public:
 
 		resultColor += ambient + diffuse + specular;
 
-		return resultColor * 255.f;
+		return resultColor;
 	}
 };

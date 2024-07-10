@@ -3,7 +3,7 @@
 #include "OBJ_Loader.h"
 #include "Shader.h"
 #include "thread"
-#include "opencv2/opencv.hpp"
+#include <glfw3.h>
 
 constexpr int width = 700;
 constexpr int height = 700;
@@ -12,8 +12,15 @@ Light light;
 Camera camera;
 int frameCount = 0;
 bool hasInput = false;
+
 float inputFloat1;
 float inputFloat2;
+
+bool firstMouse = true;
+float lastX = 800.0f / 2.0f;
+float lastY = 600.0f / 2.0f;
+float yaw = -90.0f;
+float pitch = 0.0f;
 
 Vector4f Cast(Vector3f vec,float w)
 {
@@ -40,59 +47,91 @@ void SetLight()
 	light.ShadowMap.resize(height * width);
 }
 
-void InputObject(char key)
+void InputObject(GLFWwindow* window)
 {
 	Vector3f rotation = { 0,0,0 };
-	switch (key)
-	{
-	case 56: 
-		
-		break;
-	case 50: 
-		
-		break;
-	case 52: 
+
+	//if (glfwGetKey(window, 56) == GLFW_PRESS) {
+	//	// 处理按键 56 的逻辑
+	//}
+	//if (glfwGetKey(window, 50) == GLFW_PRESS) {
+	//	// 处理按键 50 的逻辑
+	//}
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 		rotation += Vector3f(0, 1, 0);
-		break;
-	case 54: 
-		rotation -= Vector3f(0, 1, 0);
-		break;
-	default:
-		break;
 	}
-	for (auto& obj : objectList)
-	{
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		rotation -= Vector3f(0, 1, 0);
+	}
+
+	for (auto& obj : objectList) {
 		obj.Rotation += rotation;
 	}
 }
 
-void InputCamera(char key)
+void MouseCameraInput(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // 注意这里是反过来的，因为y坐标是从底部往顶部增大的
+	lastX = xpos;
+	lastY = ypos;
+
+	float sensitivity = 0.1f; // 鼠标灵敏度
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	// 确保当pitch超出范围时屏幕不会翻转
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+
+	Vector3f front = Vector3f(cos(yaw*PI/180.0f) * cos(pitch * PI / 180.0f), sin(pitch * PI / 180.0f), sin(yaw * PI / 180.0f)) * cos(pitch * PI / 180.0f);
+
+	camera.Direction = front.normalized();
+
+	Vector3f worldUp(0.0f, 1.0f, 0.0f);
+	Vector3f right = camera.Direction.cross(worldUp).normalized();
+
+	// 计算上向量
+	camera.Up = right.cross(camera.Direction).normalized();
+}
+
+void InputCamera(GLFWwindow* window)
 {
 	float moveSpeed = 0.5f;
 	float rotateSpeed = 0.05f;
 	Vector3f right = camera.Direction.cross(camera.Up);
 
-	switch (key)
-	{
-	case 'w': // 向前移动
-		camera.Position += Cast(camera.Direction * moveSpeed , 0.0f);
-		break;
-	case 's': // 向后移动
+	if (glfwGetKey(window, 'W') == GLFW_PRESS) {
+		camera.Position += Cast(camera.Direction * moveSpeed, 0.0f);
+	}
+	if (glfwGetKey(window, 'S') == GLFW_PRESS) {
 		camera.Position -= Cast(camera.Direction * moveSpeed, 0.0f);
-		break;
-	case 'a': // 向左移动
+	}
+	if (glfwGetKey(window, 'A') == GLFW_PRESS) {
 		camera.Position -= Cast(right * moveSpeed, 0.0f);
-		break;
-	case 'd': // 向右移动
+	}
+	if (glfwGetKey(window, 'D') == GLFW_PRESS) {
 		camera.Position += Cast(right * moveSpeed, 0.0f);
-		break;
-	case 'q': // 向上移动
+	}
+	if (glfwGetKey(window, 'Q') == GLFW_PRESS) {
 		camera.Position += Cast(camera.Up * moveSpeed, 0.0f);
-		break;
-	case 'e': // 向下移动
+	}
+	if (glfwGetKey(window, 'E') == GLFW_PRESS) {
 		camera.Position -= Cast(camera.Up * moveSpeed, 0.0f);
-		break;
-	case 'j': // 左转
+	}
+	if (glfwGetKey(window, 'J') == GLFW_PRESS) {
 		camera.Direction = Vector3f(
 			camera.Direction[0] * cos(rotateSpeed) - camera.Direction[2] * sin(rotateSpeed),
 			camera.Direction[1],
@@ -103,8 +142,8 @@ void InputCamera(char key)
 			camera.Up[1],
 			camera.Up[0] * sin(rotateSpeed) + camera.Up[2] * cos(rotateSpeed)
 		);
-		break;
-	case 'l': // 右转
+	}
+	if (glfwGetKey(window, 'L') == GLFW_PRESS) {
 		camera.Direction = Vector3f(
 			camera.Direction[0] * cos(-rotateSpeed) - camera.Direction[2] * sin(-rotateSpeed),
 			camera.Direction[1],
@@ -115,8 +154,8 @@ void InputCamera(char key)
 			camera.Up[1],
 			camera.Up[0] * sin(-rotateSpeed) + camera.Up[2] * cos(-rotateSpeed)
 		);
-		break;
-	case 'i': // 向上看
+	}
+	if (glfwGetKey(window, 'I') == GLFW_PRESS) {
 		camera.Direction = Vector3f(
 			camera.Direction[0],
 			camera.Direction[1] * cos(rotateSpeed) - camera.Direction[2] * sin(rotateSpeed),
@@ -127,8 +166,8 @@ void InputCamera(char key)
 			camera.Up[1] * cos(rotateSpeed) - camera.Up[2] * sin(rotateSpeed),
 			camera.Up[1] * sin(rotateSpeed) + camera.Up[2] * cos(rotateSpeed)
 		);
-		break;
-	case 'k': // 向下看
+	}
+	if (glfwGetKey(window, 'K') == GLFW_PRESS) {
 		camera.Direction = Vector3f(
 			camera.Direction[0],
 			camera.Direction[1] * cos(-rotateSpeed) - camera.Direction[2] * sin(-rotateSpeed),
@@ -139,9 +178,9 @@ void InputCamera(char key)
 			camera.Up[1] * cos(-rotateSpeed) - camera.Up[2] * sin(-rotateSpeed),
 			camera.Up[1] * sin(-rotateSpeed) + camera.Up[2] * cos(-rotateSpeed)
 		);
-		break;
 	}
 }
+
 
 void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f scale,Shader* shader)
 {
@@ -179,16 +218,30 @@ void SetModel(std::string objName, Vector3f pos, Vector3f rotation, Vector3f sca
 
 int main()
 {
+	// 初始化GLFW
+	if (!glfwInit()) {
+		return -1;
+	}
+
+	// 创建窗口
+	GLFWwindow* window = glfwCreateWindow(700, 700, "PurpleFlowerRenderer", NULL, NULL);
+	if (!window) {
+		glfwTerminate();
+		return -1;
+	}
+
+	glfwMakeContextCurrent(window);
+
 	//初始化渲染器
 	Renderer r(width, height);
 
-	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
+	SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
 
 	/*SetModel("bunny", Vector3f(0, -3, 1), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 		new BlinnPhongShader(&light, &camera));*/
 
-	SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new CartoonShader(&light, &camera,Vector3f(0,1,1)));
+	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+	//	new CartoonShader(&light, &camera, Vector3f(0, 1, 1)));
 
 	//SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 	//	new TextureShader(&light, &camera, new Texture("Knife")));
@@ -199,22 +252,22 @@ int main()
 	/*SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
 		new BlinnPhongShader(&light, &camera));*/
 
-	/*SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
-		new CartoonShader(&light, &camera, Vector3f(0, 1, 1)));*/
+		/*SetModel("11090_Cyclops_v2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.2, 0.2, 0.2),
+			new CartoonShader(&light, &camera, Vector3f(0, 1, 1)));*/
 
-	/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
-		new TextureShader(&light, &camera,new Texture("Skull")));*/
+			/*SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
+				new TextureShader(&light, &camera,new Texture("Skull")));*/
 
-	//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
-	//	new DissolveShader(&light, &camera, Vector3f(1, 0, 0),
-	//		new Texture("noise"), &inputFloat1,&inputFloat2));
+				//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
+				//	new DissolveShader(&light, &camera, Vector3f(1, 0, 0),
+				//		new Texture("noise"), &inputFloat1,&inputFloat2));
 
-	/*SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
-		new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("ScanningNoise"), 
-			&inputFloat1, &inputFloat2));*/
+				/*SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
+					new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("ScanningNoise"),
+						&inputFloat1, &inputFloat2));*/
 
-	//SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
-	//	new BlinnPhongShader(&light, &camera));
+						//SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
+						//	new BlinnPhongShader(&light, &camera));
 
 	SetModel("Table", Vector3f(0, -6, 0), Vector3f(0, 0, 0), Vector3f(5, 3, 5),
 		new ShadowShader(&light, &camera));
@@ -223,7 +276,8 @@ int main()
 
 	SetCamera(); //设置相机
 
-	
+	glfwSetCursorPosCallback(window, MouseCameraInput);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	do
 	{
@@ -238,21 +292,45 @@ int main()
 		r.VertexShader(list, camera);
 		r.FragmentShader(list);
 
-		//绘制
-		cv::Mat image(height, width, CV_32FC3, r.GetFrameBuffer().data());
+		glClear(GL_COLOR_BUFFER_BIT);
 
-		image.convertTo(image, CV_8UC3, 1.0f);
-		cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
-		cv::imshow("PurpleFlowerRender", image);
-		int key = cv::waitKey() & 0xFF;
+		// 设置投影矩阵
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0.0, width, 0.0, height, -1.0, 1.0);
+
+		// 设置模型视图矩阵
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		// 渲染_frameBuffer中的颜色数据
+
+		glBegin(GL_POINTS);
+		glPointSize(1.0f);
+
+		for (int y = 0; y < height; y++)
+			for (int x = 0; x < width; x++)
+			{
+				auto color = r.GetFrameBuffer()[r.GetPixelIndex(x, y)];
+				glColor3f(color.x(), color.y(), color.z());
+				glVertex2f(x, y); // 仅作示例，实际根据需要绘制不同的图元
+			}
+
+		glEnd();
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 
 		std::cout << "1输入:" << inputFloat1 << "\n";
 		std::cout << "2输入:" << inputFloat2 << "\n";
-		std::cout << "第" << ++frameCount <<"帧" << "\n";
+		std::cout << "第" << ++frameCount << "帧" << "\n";
 
-		InputObject(key);
-		InputCamera(key);
-		if (key == 27)break;
-	} while (true);
+		InputObject(window);
+		InputCamera(window);
+
+	} while (!glfwWindowShouldClose(window));
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
 
 }
