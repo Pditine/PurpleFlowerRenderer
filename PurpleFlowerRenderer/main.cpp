@@ -40,71 +40,33 @@ void SetLight()
 	light.ShadowMap.resize(height * width);
 }
 
-//void Input()
-//{
-//	while (true)
-//	{
-//		Vector3f rotation = { 0,0,0 };
-//		Vector4f position = { 0,0,0,0 };
-//
-//		if (GetAsyncKeyState(VK_UP))
-//			position += Vector4f(0, 0, -1,1);
-//		if (GetAsyncKeyState(VK_DOWN))
-//			position += Vector4f(0, 0, 1,1);
-//		if (GetAsyncKeyState(VK_LEFT))
-//			rotation += Vector3f(0, 1, 0);
-//		if (GetAsyncKeyState(VK_RIGHT))
-//			rotation += Vector3f(0, -1, 0);
-//		if (GetAsyncKeyState(VK_ADD))
-//			inputFloat1 += 0.01f;
-//		if (GetAsyncKeyState(VK_SUBTRACT))
-//			inputFloat1 -= 0.01f;
-//		if (GetAsyncKeyState(VK_HOME))
-//			inputFloat2 += 0.1f;
-//		if (GetAsyncKeyState(VK_DELETE))
-//			inputFloat2 -= 0.1f;
-//
-//		for (auto& obj : objectList)
-//		{
-//			obj.Rotation += rotation;
-//		}
-//		
-//		camera.Position += position;
-//		std::this_thread::sleep_for(std::chrono::milliseconds(20));
-//	}
-//}
+void InputObject(char key)
+{
+	Vector3f rotation = { 0,0,0 };
+	switch (key)
+	{
+	case 56: 
+		
+		break;
+	case 50: 
+		
+		break;
+	case 52: 
+		rotation += Vector3f(0, 1, 0);
+		break;
+	case 54: 
+		rotation -= Vector3f(0, 1, 0);
+		break;
+	default:
+		break;
+	}
+	for (auto& obj : objectList)
+	{
+		obj.Rotation += rotation;
+	}
+}
 
-//void InputKey(int key)
-//{
-//	Vector3f direction = { 0,0,0 };
-//	Vector3f position = { 0,0,0 };
-//	switch (key)
-//	{
-//	case 'i':
-//		direction += Vector3f{0,0.1f,0};
-//			break;
-//	case 'k':
-//		direction += Vector3f{ 0,-0.1f,0 };
-//		break;
-//	case 'j':
-//		direction += Vector3f{ -0.1f,0,0 };
-//		break;
-//	case 'l':
-//		direction += Vector3f{ 0.1f,0,0 };
-//		break;
-//	case 'w':
-//		position += camera.Direction;
-//
-//	}
-//
-//	Matrix3f rotation;
-//	rotation << 0, 1, 0,
-//		0, 0, -1,
-//		1, 0, 0;
-//
-//}
-
-void UpdateCamera(char key)
+void InputCamera(char key)
 {
 	float moveSpeed = 0.5f;
 	float rotateSpeed = 0.05f;
@@ -261,7 +223,7 @@ int main()
 
 	SetCamera(); //设置相机
 
-	//std::thread input(Input);
+	
 
 	do
 	{
@@ -282,14 +244,14 @@ int main()
 		image.convertTo(image, CV_8UC3, 1.0f);
 		cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
 		cv::imshow("PurpleFlowerRender", image);
-		int key = cv::waitKey(1) & 0xFF;
+		int key = cv::waitKey() & 0xFF;
 
 		std::cout << "1输入:" << inputFloat1 << "\n";
 		std::cout << "2输入:" << inputFloat2 << "\n";
 		std::cout << "第" << ++frameCount <<"帧" << "\n";
 
-		//InputKey(key);
-		UpdateCamera(key);
+		InputObject(key);
+		InputCamera(key);
 		if (key == 27)break;
 	} while (true);
 
