@@ -42,7 +42,7 @@ void SetLight()
 {
 	light.Position = Vector4f(8, 10, 8, 1);
 	light.Direction = Vector3f(-1, -2, -1).normalized();
-	light.Intensity = 0.8f;
+	light.Intensity = 0.8;
 	light.Color = Vector3f(1,1,1);
 	light.ShadowMap.resize(height * width);
 }
@@ -58,10 +58,10 @@ void InputObject(GLFWwindow* window)
 	//	// 处理按键 50 的逻辑
 	//}
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		rotation += Vector3f(0, 1, 0);
+		rotation += Vector3f(0, 3, 0);
 	}
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		rotation -= Vector3f(0, 1, 0);
+		rotation -= Vector3f(0, 3, 0);
 	}
 
 	for (auto& obj : objectList) {
@@ -224,7 +224,7 @@ int main()
 	}
 
 	// 创建窗口
-	GLFWwindow* window = glfwCreateWindow(700, 700, "PurpleFlowerRenderer", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(width, height, "PurpleFlowerRenderer", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		return -1;
@@ -269,11 +269,11 @@ int main()
 						//SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 						//	new BlinnPhongShader(&light, &camera));
 
-	SetModel("Town", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
-		new TextureShader(&light, &camera, new Texture("Town")));
+	SetModel("Town", Vector3f(0, -4, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
+		new ShadowTextureShader(&light, &camera, new Texture("Town")));
 
-	SetModel("Table", Vector3f(0, -6, 0), Vector3f(0, 0, 0), Vector3f(5, 3, 5),
-		new ShadowShader(&light, &camera));
+	//SetModel("Table", Vector3f(0, -6, 0), Vector3f(0, 0, 0), Vector3f(5, 3, 5),
+	//	new ShadowShader(&light, &camera));
 
 	SetLight(); // 设置光照
 
@@ -284,8 +284,6 @@ int main()
 
 	do
 	{
-		std::vector<Object> os;
-		os.push_back(objectList[0]);
 		light.SetShadowMap(objectList, 700, 700);
 
 		r.Clear();
