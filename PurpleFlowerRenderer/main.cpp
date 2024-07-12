@@ -29,7 +29,7 @@ Vector4f Cast(Vector3f vec,float w)
 
 void SetCamera()
 {
-	camera.Position = Vector4f(0, 0, 20,1);
+	camera.Position = Vector4f(0, 5, 40,1);
 	camera.Direction = Vector3f(0, 0, -1).normalized();
 	camera.Up = Vector3f(0, 1, 0).normalized();
 	camera.Fov = 60.f;
@@ -51,12 +51,18 @@ void InputObject(GLFWwindow* window)
 {
 	Vector3f rotation = { 0,0,0 };
 
-	//if (glfwGetKey(window, 56) == GLFW_PRESS) {
-	//	// 处理按键 56 的逻辑
-	//}
-	//if (glfwGetKey(window, 50) == GLFW_PRESS) {
-	//	// 处理按键 50 的逻辑
-	//}
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+		inputFloat1 += 0.01f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+		inputFloat1 -= 0.01f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+		inputFloat2 += 0.1f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+		inputFloat2 -= 0.1f;
+	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 		rotation += Vector3f(0, 3, 0);
 	}
@@ -272,6 +278,10 @@ int main()
 	SetModel("Town", Vector3f(0, -4, 0), Vector3f(0, 0, 0), Vector3f(2, 2, 2),
 		new ShadowTextureShader(&light, &camera, new Texture("Town")));
 
+	//SetModel("Town", Vector3f(0, -4, 0), Vector3f(0, 0, 0), Vector3f(2, 2, 2),
+	//	new DissolveShader(&light, &camera, Vector3f(1, 0, 0),
+	//				new Texture("noise"), &inputFloat1,&inputFloat2));
+
 	//SetModel("Table", Vector3f(0, -6, 0), Vector3f(0, 0, 0), Vector3f(5, 3, 5),
 	//	new ShadowShader(&light, &camera));
 
@@ -286,8 +296,8 @@ int main()
 	{
 		light.SetShadowMap(objectList, 700, 700);
 
-		//r.Clear();
-		r.Clear(new Texture("sky"));
+		r.Clear();
+		//r.Clear(new Texture("sky"));
 		std::vector<Object> list = objectList;
 
 		//光栅化

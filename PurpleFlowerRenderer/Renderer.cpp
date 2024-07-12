@@ -33,7 +33,7 @@ std::vector<Vector3f>& Renderer::GetFrameBuffer()
 
 void Renderer::Clear()
 {
-	std::fill(_frameBuffer.begin(), _frameBuffer.end(), Vector3f(0, 1, 1));
+	std::fill(_frameBuffer.begin(), _frameBuffer.end(), Vector3f(173.0f/255, 216.0f/255, 230.0f/255));
 	std::fill(_zBuffer.begin(), _zBuffer.end(), std::numeric_limits<float>::infinity());
 }
 
