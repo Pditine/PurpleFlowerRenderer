@@ -37,6 +37,21 @@ void Renderer::Clear()
 	std::fill(_zBuffer.begin(), _zBuffer.end(), std::numeric_limits<float>::infinity());
 }
 
+void Renderer::Clear(Texture* background)
+{
+	//std::fill(_frameBuffer.begin(), _frameBuffer.end(), Vector3f(0, 1, 1));
+
+	for (int x = 0; x < _width; x++)
+		for (int y = 0; y < _height; y++)
+		{
+			auto color = background->GetColor((float)x/_width, (float)y/_height);
+			//std::cout << (float)x / _width << "\n";
+			_frameBuffer[GetPixelIndex(x, y)] = Vector3f(color.r,color.g,color.b)/255.0f;
+		}
+
+	std::fill(_zBuffer.begin(), _zBuffer.end(), std::numeric_limits<float>::infinity());
+}
+
 float Renderer::ToRadian(float angle)
 {
 	return (angle / 180) * PI;

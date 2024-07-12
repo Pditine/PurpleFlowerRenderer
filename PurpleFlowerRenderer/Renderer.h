@@ -4,6 +4,8 @@
 
 constexpr float PI = 3.1415926f;
 
+class Texture;
+
 class Renderer
 {
 private:
@@ -27,6 +29,7 @@ public:
 	Renderer(int w, int h);
 
 	void Clear(); // Çå³ý»º´æ
+	void Clear(Texture* background); // Çå³ý»º´æ
 
 	static float ToRadian(float angle); // »¡¶È×ª½Ç¶È
 

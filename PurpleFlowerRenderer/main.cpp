@@ -29,7 +29,7 @@ Vector4f Cast(Vector3f vec,float w)
 
 void SetCamera()
 {
-	camera.Position = Vector4f(0, 0, 10,1);
+	camera.Position = Vector4f(0, 0, 20,1);
 	camera.Direction = Vector3f(0, 0, -1).normalized();
 	camera.Up = Vector3f(0, 1, 0).normalized();
 	camera.Fov = 60.f;
@@ -40,7 +40,7 @@ void SetCamera()
 
 void SetLight()
 {
-	light.Position = Vector4f(8, 10, 8, 1);
+	light.Position = Vector4f(10, 20, 10, 1);
 	light.Direction = Vector3f(-1, -2, -1).normalized();
 	light.Intensity = 0.8;
 	light.Color = Vector3f(1,1,1);
@@ -109,7 +109,7 @@ void MouseCameraInput(GLFWwindow* window, double xpos, double ypos)
 
 void InputCamera(GLFWwindow* window)
 {
-	float moveSpeed = 0.5f;
+	float moveSpeed = 1.0f;
 	float rotateSpeed = 0.05f;
 	Vector3f right = camera.Direction.cross(camera.Up);
 
@@ -269,7 +269,7 @@ int main()
 						//SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 						//	new BlinnPhongShader(&light, &camera));
 
-	SetModel("Town", Vector3f(0, -4, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
+	SetModel("Town", Vector3f(0, -4, 0), Vector3f(0, 0, 0), Vector3f(2, 2, 2),
 		new ShadowTextureShader(&light, &camera, new Texture("Town")));
 
 	//SetModel("Table", Vector3f(0, -6, 0), Vector3f(0, 0, 0), Vector3f(5, 3, 5),
@@ -286,7 +286,8 @@ int main()
 	{
 		light.SetShadowMap(objectList, 700, 700);
 
-		r.Clear();
+		//r.Clear();
+		r.Clear(new Texture("sky"));
 		std::vector<Object> list = objectList;
 
 		//π‚’§ªØ
