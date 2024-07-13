@@ -58,14 +58,14 @@ inline float Clamp(float num)
 
 inline Vector3f BlendColor(Vector3f a,Vector3f b)
 {
-	return Vector3f(a.x()*b.x(),a.y()*b.y(),a.z()*b.z());
+	return Vector3f(a.x() * 0.5f + b.x() * 0.5f, a.y() * 0.5f + b.y() * 0.5f, a.z() * 0.5f + b.z() * 0.5f);
 }
 
 inline Vector3f BlendColor(Vector3f a, Vector3f b,float rote)
 {
 	a *= rote;
-	b /= rote;
-	return Vector3f(a.x() * b.x(), a.y() * b.y(), a.z() * b.z());
+	b *= 1-rote;
+	return Vector3f(a.x() + b.x(), a.y() + b.y(), a.z() + b.z());
 }
 
 class BlinnPhongShader : public Shader
@@ -85,7 +85,7 @@ public:
 
 		float halfLambert = (worldNormal.dot(_light->Direction)+1)/2;
 
-		Vector3f diffuse = BlendColor(_light->Color*_light->Intensity,data.color,0.3f) * halfLambert;
+		Vector3f diffuse = BlendColor(_light->Color*_light->Intensity,data.color) * halfLambert;
 
 		Vector3f ambient = Vector3f(0.05f, 0.05f, 0.05f);
 
@@ -154,7 +154,7 @@ public:
 
 		float halfLambert = (worldNormal.dot(_light->Direction) + 1) / 2;
 
-		Vector3f diffuse = BlendColor(_light->Color * _light->Intensity, data.color, 0.3f) * halfLambert;
+		Vector3f diffuse = BlendColor(_light->Color * _light->Intensity, data.color) * halfLambert;
 
 		Vector3f ambient = Vector3f(0.05f, 0.05f, 0.05f);
 

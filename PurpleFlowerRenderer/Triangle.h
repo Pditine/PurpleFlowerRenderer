@@ -46,9 +46,23 @@ public:
 		color[i] = col;
 	}
 
+	void SetNormal(const Vector4f& n0, const Vector4f& n1, const Vector4f& n2)
+	{
+		normal[0] = n0;
+		normal[1] = n0;
+		normal[2] = n0;
+	}
+
 	void SetNormal(const int& i, const Vector4f& n)
 	{
-		normal[i] = Vector4f(n.x(), n.y(), n.z(),1.f);
+		normal[i] = Vector4f(n.x(), n.y(), n.z(), 1.f);
+	}
+
+	void SetUV(const Vector2f& uv0, const Vector2f& uv1, const Vector2f& uv2)
+	{
+		uv[0] = uv0;
+		uv[1] = uv1;
+		uv[2] = uv2;
 	}
 
 	void SetUV(const int& i, const Vector2f& tC)
