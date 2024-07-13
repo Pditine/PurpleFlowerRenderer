@@ -63,6 +63,7 @@ void InputObject(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
 		inputFloat2 -= 0.1f;
 	}
+
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 		rotation += Vector3f(0, 3, 0);
 	}
@@ -243,8 +244,8 @@ int main()
 
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),new NormalShader());
 
-	/*SetModel("bunny", Vector3f(0, -3, 1), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-		new BlinnPhongShader(&light, &camera));*/
+	//SetModel("bunny", Vector3f(0, -3, 1), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
+	//	new BlinnPhongShader(&light, &camera));
 
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
 	//	new CartoonShader(&light, &camera, Vector3f(1, 0, 0)));
@@ -264,7 +265,7 @@ int main()
 	//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(-90, 0, 0), Vector3f(0.15, 0.15, 0.15),
 	//	new TextureShader(&light, &camera, new Texture("Skull")));
 
-	//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.15, 0.15, 0.15),
+	//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(-90, 0, 0), Vector3f(0.15, 0.15, 0.15),
 	//	new DissolveShader(&light, &camera, Vector3f(1, 0, 0),
 	//		new Texture("noise"), &inputFloat1,&inputFloat2));
 
@@ -293,10 +294,10 @@ int main()
 
 	do
 	{
-		light.SetShadowMap(objectList, 700, 700);
+		light.SetShadowMap(objectList, width, height);
 
-		r.Clear();
-		//r.Clear(new Texture("sky"));
+		//r.Clear();
+		r.Clear(new Texture("sky"));
 		std::vector<Object> list = objectList;
 
 		//π‚’§ªØ

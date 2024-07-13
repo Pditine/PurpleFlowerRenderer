@@ -213,7 +213,7 @@ public:
 		}
 
 		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue *255 - *_lineWidth< 0)
-			return _lineColor*255;
+			return _lineColor;
 
 		return resultColor;
 	}
@@ -266,7 +266,7 @@ public:
 		if (x >= 0 && x < _light->ShadowMapWidth &&
 			y >= 0 && y < _light->ShadowMapHeight && 
 			_light->ShadowMap[x + (_light->ShadowMapHeight - y - 1) * _light->ShadowMapWidth]!= std::numeric_limits<float>::infinity())
-			if(lightViewportPos.z()> (_light->ShadowMap[x + (_light->ShadowMapHeight - y - 1) * _light->ShadowMapWidth])+0.0025f)
+			if(lightViewportPos.z()> (_light->ShadowMap[x + (_light->ShadowMapHeight - y - 1) * _light->ShadowMapWidth])+0.00025f)
 			{
 				//std::cout <<lightViewportPos.z()<<":" << _light->ShadowMap[lightViewportPos.x() + (_light->ShadowMapHeight - lightViewportPos.y() - 1) * _light->ShadowMapWidth] << "\n";
 				specular = Vector3f(0, 0, 0);

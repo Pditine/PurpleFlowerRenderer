@@ -1,7 +1,6 @@
 #pragma once
 #include <windows.h>
 #include <Eigen>
-#include <iostream>
 #include <fstream>
 #include <vector>
 #include <cstdint>

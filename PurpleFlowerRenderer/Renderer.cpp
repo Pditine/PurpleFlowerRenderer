@@ -33,7 +33,7 @@ std::vector<Vector3f>& Renderer::GetFrameBuffer()
 
 void Renderer::Clear()
 {
-	std::fill(_frameBuffer.begin(), _frameBuffer.end(), Vector3f(173.0f/255, 216.0f/255, 230.0f/255));
+	std::fill(_frameBuffer.begin(), _frameBuffer.end(), Vector3f(0,0,0));
 	std::fill(_zBuffer.begin(), _zBuffer.end(), std::numeric_limits<float>::infinity());
 }
 
@@ -45,7 +45,6 @@ void Renderer::Clear(Texture* background)
 		for (int y = 0; y < _height; y++)
 		{
 			auto color = background->GetColor((float)x/_width, (float)y/_height);
-			//std::cout << (float)x / _width << "\n";
 			_frameBuffer[GetPixelIndex(x, y)] = Vector3f(color.r,color.g,color.b)/255.0f;
 		}
 
@@ -172,13 +171,16 @@ void Renderer::VertexShader(std::vector<Object>& objectList, Camera& c)
 			{
 				//变换
 				vec = mvp * vec; // 转换到裁剪空间
-				vec = _viewport * vec; // 转换到屏幕空间
+
+				// 转换到屏幕空间
 
 				//齐次坐标归一化
 				vec.x() /= vec.w();
 				vec.y() /= vec.w();
 				vec.z() /= vec.w();
 				vec.w() /= vec.w();
+
+				vec = _viewport * vec;
 			}
 		}
 	}
@@ -271,12 +273,12 @@ void Renderer::FragmentShader(std::vector<Object>& objects)
 			maxXf = 0;
 			minYf = _height;
 			maxYf = 0;
-			for (const auto& ver : t.vertex)
+			for (const auto& vec : t.vertex)
 			{
-				if (ver.x() < minXf) minXf = ver.x();
-				if (ver.x() > maxXf) maxXf = ver.x();
-				if (ver.y() < minYf) minYf = ver.y();
-				if (ver.y() > maxYf) maxYf = ver.y();
+				if (vec.x() < minXf) minXf = vec.x();
+				if (vec.x() > maxXf) maxXf = vec.x();
+				if (vec.y() < minYf) minYf = vec.y();
+				if (vec.y() > maxYf) maxYf = vec.y();
 			}
 
 			if (minXf < 0) minXf = 0;
@@ -303,10 +305,15 @@ void Renderer::FragmentShader(std::vector<Object>& objects)
 						float alpha2D, beta2D, gamma2D;
 						std::tie(alpha2D, beta2D, gamma2D) = Barycentric((float)x + 0.5f, (float)y + 0.5f, t.vertex);
 
+						//float theX = Interpolate(alpha2D, beta2D, gamma2D, t.vertex[0].x(), t.vertex[1].x(), t.vertex[2].x());
+						//float theY = Interpolate(alpha2D, beta2D, gamma2D, t.vertex[0].y(), t.vertex[1].y(), t.vertex[2].y());
 						float theZ = Interpolate(alpha2D, beta2D, gamma2D, t.vertex[0].z(), t.vertex[1].z(), t.vertex[2].z());
+						//float theW = Interpolate(alpha2D, beta2D, gamma2D, t.vertex[0].w(), t.vertex[1].w(), t.vertex[2].w());
 
-						//判断深度值
+						//判断深度值和是否在视锥体内
+						//todo:如果判断视锥，会有奇怪的噪点
 						if (_zBuffer[GetPixelIndex(x, y)] > theZ)
+							//&&(-theW<=theX<=theW&& -theW <= theY <= theW&& -theW <= theZ <= theW))
 						{
 							Vector3f interpolateColor = Interpolate(alpha2D, beta2D, gamma2D, t.color[0], t.color[1], t.color[2]);
 
