@@ -23,10 +23,7 @@ class Shader
 {
 public:
 
-	virtual Vector3f GetColor(const FragmentData& data)
-	{
-		return data.color;
-	}
+	virtual Vector3f GetColor(const FragmentData& data) = 0;
 
 };
 

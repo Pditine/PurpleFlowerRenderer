@@ -180,7 +180,6 @@ void Renderer::VertexShader(std::vector<Object>& objectList, Camera& c)
 				vec.z() /= vec.w();
 				vec.w() /= vec.w();
 			}
-
 		}
 	}
 	return;

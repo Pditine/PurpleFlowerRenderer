@@ -1,7 +1,6 @@
 #pragma once
 #include <Eigen>
 #include <iostream>
-#include "opencv2/opencv.hpp"
 #include "Object.h"
 #include <vector>
 #include "Renderer.h"
@@ -97,19 +96,13 @@ struct Light
 							{
 								ShadowMap[x + (ShadowMapHeight - y - 1) * ShadowMapWidth] = theZ;
 
-								float num = pow(theZ,40);
-								r.GetFrameBuffer()[x + (ShadowMapHeight - y - 1) * ShadowMapWidth] = Vector3f(num, num, num) * 255.0f;
+								/*float num = pow(theZ,40);
+								r.GetFrameBuffer()[x + (ShadowMapHeight - y - 1) * ShadowMapWidth] = Vector3f(num, num, num) * 255.0f;*/
 							}
 						}
 					}
 				}
 			}
 		}
-
-		cv::Mat image(height, width, CV_32FC3, r.GetFrameBuffer().data());
-		image.convertTo(image, CV_8UC3, 1.0f);
-		cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
-		cv::imshow("light_z", image);
-		int key = cv::waitKey(1);
 	}
 };

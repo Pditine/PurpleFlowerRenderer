@@ -325,7 +325,7 @@ int main()
 			{
 				auto color = r.GetFrameBuffer()[r.GetPixelIndex(x, y)];
 				glColor3f(color.x(), color.y(), color.z());
-				glVertex2f(x, y); // 仅作示例，实际根据需要绘制不同的图元
+				glVertex2f(x, y);
 			}
 
 		glEnd();
