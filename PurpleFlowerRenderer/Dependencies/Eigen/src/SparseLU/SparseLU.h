@@ -81,7 +81,7 @@ private:
   * \brief Sparse supernodal LU factorization for general matrices
   * 
   * This class implements the supernodal LU factorization for general matrices.
-  * It uses the main techniques from the sequential SuperLU package 
+  * It uses the _main techniques from the sequential SuperLU package 
   * (http://crd-legacy.lbl.gov/~xiaoye/SuperLU/). It handles transparently real 
   * and complex arithmetic with single and double precision, depending on the 
   * scalar type of your input matrix. 

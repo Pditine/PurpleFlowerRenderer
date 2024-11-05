@@ -445,7 +445,7 @@ struct traits<JacobiSVD<_MatrixType,QRPreconditioner> >
   *
   * SVD decomposition consists in decomposing any n-by-p matrix \a A as a product
   *   \f[ A = U S V^* \f]
-  * where \a U is a n-by-n unitary, \a V is a p-by-p unitary, and \a S is a n-by-p real positive matrix which is zero outside of its main diagonal;
+  * where \a U is a n-by-n unitary, \a V is a p-by-p unitary, and \a S is a n-by-p real positive matrix which is zero outside of its _main diagonal;
   * the diagonal entries of S are known as the \em singular \em values of \a A and the columns of \a U and \a V are known as the left
   * and right \em singular \em vectors of \a A respectively.
   *
@@ -701,7 +701,7 @@ JacobiSVD<MatrixType, QRPreconditioner>::compute(const MatrixType& matrix, unsig
     if(m_computeThinV) m_matrixV.setIdentity(m_cols, m_diagSize);
   }
 
-  /*** step 2. The main Jacobi SVD iteration. ***/
+  /*** step 2. The _main Jacobi SVD iteration. ***/
   RealScalar maxDiagEntry = m_workMatrix.cwiseAbs().diagonal().maxCoeff();
 
   bool finished = false;

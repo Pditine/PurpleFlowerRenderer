@@ -2,11 +2,10 @@
 #include "Renderer.h"
 #include "OBJ_Loader.h"
 #include "Shader.h"
-#include "thread"
 #include <glfw3.h>
 
 constexpr int width = 700;
-constexpr int height = 700;
+constexpr int height =700;
 std::vector<Object> objectList;
 Light light;
 Camera camera;
@@ -248,7 +247,10 @@ int main()
 	//	new BlinnPhongShader(&light, &camera));
 
 	//SetModel("bunny", Vector3f(0, -3, 0), Vector3f(0, 0, 0), Vector3f(30, 30, 30),
-	//	new CartoonShader(&light, &camera, Vector3f(1, 0, 0)));
+	//	new CartoonShader(&light, &camera, Vector3f(0, 1, 1)));
+
+	//SetModel("bunny", Vector3f(3, -3, 1), Vector3f(0, 90, 0), Vector3f(30, 30, 30),
+	//	new CartoonShader(&light, &camera, Vector3f(1, 0, 1)));
 
 	//SetModel("Knife", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
 	//	new TextureShader(&light, &camera, new Texture("Knife")));
@@ -266,23 +268,28 @@ int main()
 	//	new TextureShader(&light, &camera, new Texture("Skull")));
 
 	//SetModel("12140_Skull_v3_L2", Vector3f(0, 0, 0), Vector3f(-90, 0, 0), Vector3f(0.15, 0.15, 0.15),
-	//	new DissolveShader(&light, &camera, Vector3f(1, 0, 0),
-	//		new Texture("noise"), &inputFloat1,&inputFloat2));
+	//	new DissolveTextureShader(&light, &camera, Vector3f(1, 0, 0),
+	//		new Texture("noise"),new Texture("Skull"), &inputFloat1, &inputFloat2));
 
 	/*SetModel("Alien Animal", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(0.25, 0.25, 0.25),
 				new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("ScanningNoise"),
 					&inputFloat1, &inputFloat2));*/
 
 	//SetModel("Spaceship", Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1),
-	//	new BlinnPhongShader(&light, &camera));
+	//	new DissolveShader(&light, &camera, Vector3f(1, 0, 0), new Texture("noise"),
+	//		&inputFloat1, &inputFloat2));
 
 	SetModel("Town", Vector3f(0, -4, 0), Vector3f(0, 0, 0), Vector3f(2, 2, 2),
-		new ShadowTextureShader(&light, &camera, new Texture("Town")));
+		new ShadowTextureShader(&light, &camera,new Texture("Town")));
+
+	//这个模型面数太多了，会非常卡
+	//SetModel("dragon",Vector3f(0,-1,0),Vector3f(0,90,0), Vector3f(25,25,25),
+	//	new ShadowShader(&light, &camera));
 
 	/*SetModel("Town", Vector3f(0, -4, 0), Vector3f(0, 0, 0), Vector3f(2, 2, 2),
 			new CartoonShader(&light, &camera, Vector3f(0, 1, 1)));*/
 
-	//SetModel("Table", Vector3f(0, -6, 0), Vector3f(0, 0, 0), Vector3f(5, 3, 5),
+	//SetModel("Table", Vector3f(0, -16, 0), Vector3f(0, 0, 0), Vector3f(10, 4, 10),
 	//	new ShadowShader(&light, &camera));
 
 	SetLight(); // 设置光照

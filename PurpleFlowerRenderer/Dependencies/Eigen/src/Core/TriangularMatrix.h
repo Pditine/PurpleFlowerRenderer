@@ -746,7 +746,7 @@ template<typename Kernel, unsigned int Mode, int UnrollCount, bool ClearOpposite
 
 
 /** \internal Specialization of the dense assignment kernel for triangular matrices.
-  * The main difference is that the triangular, diagonal, and opposite parts are processed through three different functions.
+  * The _main difference is that the triangular, diagonal, and opposite parts are processed through three different functions.
   * \tparam UpLo must be either Lower or Upper
   * \tparam Mode must be either 0, UnitDiag, ZeroDiag, or SelfAdjoint
   */

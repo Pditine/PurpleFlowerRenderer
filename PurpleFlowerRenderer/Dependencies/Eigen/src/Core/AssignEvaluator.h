@@ -817,7 +817,7 @@ struct EigenBase2EigenBase {};
 template<typename,typename> struct AssignmentKind { typedef EigenBase2EigenBase Kind; };
 template<> struct AssignmentKind<DenseShape,DenseShape> { typedef Dense2Dense Kind; };
 
-// This is the main assignment class
+// This is the _main assignment class
 template< typename DstXprType, typename SrcXprType, typename Functor,
           typename Kind = typename AssignmentKind< typename evaluator_traits<DstXprType>::Shape , typename evaluator_traits<SrcXprType>::Shape >::Kind,
           typename EnableIf = void>

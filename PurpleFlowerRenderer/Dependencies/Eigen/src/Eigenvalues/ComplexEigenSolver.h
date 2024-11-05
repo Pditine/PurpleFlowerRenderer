@@ -35,10 +35,10 @@ namespace Eigen {
   * almost always invertible, in which case we have \f$ A = V D V^{-1}
   * \f$. This is called the eigendecomposition.
   *
-  * The main function in this class is compute(), which computes the
+  * The _main function in this class is compute(), which computes the
   * eigenvalues and eigenvectors of a given function. The
   * documentation for that function contains an example showing the
-  * main features of the class.
+  * _main features of the class.
   *
   * \sa class EigenSolver, class SelfAdjointEigenSolver
   */

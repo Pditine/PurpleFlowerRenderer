@@ -25,7 +25,7 @@ namespace Eigen {
   *
   * The matrix is not required to be square.
   *
-  * This class represents an expression of the main diagonal, or any sub/super diagonal
+  * This class represents an expression of the _main diagonal, or any sub/super diagonal
   * of a square matrix. It is the return type of MatrixBase::diagonal() and MatrixBase::diagonal(Index) and most of the
   * time this is the only way it is used.
   *
@@ -202,7 +202,7 @@ MatrixBase<Derived>::diagonal() const
   * \c *this is not required to be square.
   *
   * The template parameter \a DiagIndex represent a super diagonal if \a DiagIndex > 0
-  * and a sub diagonal otherwise. \a DiagIndex == 0 is equivalent to the main diagonal.
+  * and a sub diagonal otherwise. \a DiagIndex == 0 is equivalent to the _main diagonal.
   *
   * Example: \include MatrixBase_diagonal_int.cpp
   * Output: \verbinclude MatrixBase_diagonal_int.out
@@ -228,7 +228,7 @@ MatrixBase<Derived>::diagonal(Index index) const
   * \c *this is not required to be square.
   *
   * The template parameter \a DiagIndex represent a super diagonal if \a DiagIndex > 0
-  * and a sub diagonal otherwise. \a DiagIndex == 0 is equivalent to the main diagonal.
+  * and a sub diagonal otherwise. \a DiagIndex == 0 is equivalent to the _main diagonal.
   *
   * Example: \include MatrixBase_diagonal_template_int.cpp
   * Output: \verbinclude MatrixBase_diagonal_template_int.out

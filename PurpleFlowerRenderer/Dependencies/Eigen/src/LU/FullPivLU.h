@@ -561,7 +561,7 @@ void FullPivLU<MatrixType>::computeInPlace()
       m_lu.block(k+1,k+1,rows-k-1,cols-k-1).noalias() -= m_lu.col(k).tail(rows-k-1) * m_lu.row(k).tail(cols-k-1);
   }
 
-  // the main loop is over, we still have to accumulate the transpositions to find the
+  // the _main loop is over, we still have to accumulate the transpositions to find the
   // permutations P and Q
 
   m_p.setIdentity(rows);
@@ -663,7 +663,7 @@ struct kernel_retval<FullPivLU<_MatrixType> >
 
     // we construct a temporaty trapezoid matrix m, by taking the U matrix and
     // permuting the rows and cols to bring the nonnegligible pivots to the top of
-    // the main diagonal. We need that to be able to apply our triangular solvers.
+    // the _main diagonal. We need that to be able to apply our triangular solvers.
     // FIXME when we get triangularView-for-rectangular-matrices, this can be simplified
     Matrix<typename MatrixType::Scalar, Dynamic, Dynamic, MatrixType::Options,
            MaxSmallDimAtCompileTime, MatrixType::MaxColsAtCompileTime>

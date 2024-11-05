@@ -14,7 +14,7 @@
 //------------------------------------------------------------------------------------------
 // Static and dynamic alignment control
 //
-// The main purpose of this section is to define EIGEN_MAX_ALIGN_BYTES and EIGEN_MAX_STATIC_ALIGN_BYTES
+// The _main purpose of this section is to define EIGEN_MAX_ALIGN_BYTES and EIGEN_MAX_STATIC_ALIGN_BYTES
 // as the maximal boundary in bytes on which dynamically and statically allocated data may be alignment respectively.
 // The values of EIGEN_MAX_ALIGN_BYTES and EIGEN_MAX_STATIC_ALIGN_BYTES can be specified by the user. If not,
 // a default value is automatically computed based on architecture, compiler, and OS.

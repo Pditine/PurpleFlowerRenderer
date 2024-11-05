@@ -126,7 +126,7 @@ public:
 
 		Vector3f halfDirection = (_camera->Direction + _light->Direction).normalized();
 
-		Vector3f specular = BlendColor(_light->Color, Vector3f(1, 1, 1)) * pow(Clamp(halfDirection.dot(worldNormal)), 50) * _light->Intensity;
+		Vector3f specular = BlendColor(_light->Color, Vector3f(0.7, 0.7, 0.7)) * pow(Clamp(halfDirection.dot(worldNormal)), 50) * _light->Intensity;
 
 		resultColor += ambient + diffuse + specular;
 
@@ -213,6 +213,54 @@ public:
 		}
 
 		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue *255 - *_lineWidth< 0)
+			return _lineColor;
+
+		return resultColor;
+	}
+};
+
+class DissolveTextureShader : public Shader
+{
+private:
+	Light* _light;
+	Camera* _camera;
+	Vector3f _lineColor;
+	Texture* _noise;
+	Texture* _main;
+	float* _cutValue;
+	float* _lineWidth;
+
+public:
+	DissolveTextureShader(Light* light, Camera* camera, Vector3f lineColor, Texture* noise, Texture* main, float* cutValue, float* lineWidth) :
+		_light(light), _camera(camera), _lineColor(lineColor), _noise(noise), _main(main), _cutValue(cutValue), _lineWidth(lineWidth) {}
+
+	Vector3f GetColor(const FragmentData& data) override
+	{
+		auto color = _main->GetColor(data.uv.x(), data.uv.y());
+		Vector3f modelColor = Vector3f(static_cast<float>(color.r) / 255.0f, static_cast<float>(color.g) / 255.0f, static_cast<float>(color.b) / 255.0f);
+
+		Vector3f worldNormal = Vector3f(data.normal.x(), data.normal.y(), data.normal.z());
+
+		Vector3f resultColor = Vector3f(0, 0, 0);
+
+		float halfLambert = (worldNormal.dot(_light->Direction) + 1) / 2;
+
+		Vector3f diffuse = BlendColor(_light->Color * _light->Intensity, modelColor, 0.3f) * halfLambert;
+
+		Vector3f ambient = Vector3f(0.05f, 0.05f, 0.05f);
+
+		Vector3f halfDirection = (_camera->Direction + _light->Direction).normalized();
+
+		Vector3f specular = BlendColor(_light->Color, Vector3f(1, 1, 1)) * pow(Clamp(halfDirection.dot(worldNormal)), 50) * _light->Intensity;
+
+		resultColor += ambient + diffuse + specular;
+
+		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue * 255 < 0)
+		{
+			return Vector3f(0, 0, 0);
+		}
+
+		if (_noise->GetColor(data.uv.x(), data.uv.y()).r - *_cutValue * 255 - *_lineWidth < 0)
 			return _lineColor;
 
 		return resultColor;

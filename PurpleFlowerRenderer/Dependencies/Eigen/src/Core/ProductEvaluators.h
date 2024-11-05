@@ -429,7 +429,7 @@ struct generic_product_impl<Lhs,Rhs,DenseShape,DenseShape,CoeffBasedProductMode>
   //      (see https://stackoverflow.com/questions/54738495)
   // For small fixed sizes matrices, howver, the gains are less obvious, it is sometimes x2 faster, but sometimes x3 slower,
   // and the behavior depends also a lot on the compiler... This is why this re-writting strategy is currently
-  // enabled only when falling back from the main GEMM.
+  // enabled only when falling back from the _main GEMM.
   template<typename Dst, typename Func>
   static EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE
   void eval_dynamic(Dst& dst, const Lhs& lhs, const Rhs& rhs, const Func &func)
@@ -478,7 +478,7 @@ struct generic_product_impl<Lhs,Rhs,DenseShape,DenseShape,LazyCoeffBasedProductM
 // Case 2: Evaluate coeff by coeff
 //
 // This is mostly taken from CoeffBasedProduct.h
-// The main difference is that we add an extra argument to the etor_product_*_impl::run() function
+// The _main difference is that we add an extra argument to the etor_product_*_impl::run() function
 // for the inner dimension of the product, because evaluator object do not know their size.
 
 template<int Traversal, int UnrollingIndex, typename Lhs, typename Rhs, typename RetScalar>

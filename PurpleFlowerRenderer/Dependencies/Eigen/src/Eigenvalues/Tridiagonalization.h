@@ -44,7 +44,7 @@ void tridiagonalization_inplace(MatrixType& matA, CoeffVectorType& hCoeffs);
   * \f$ A = Q T Q^* \f$ where \f$ Q \f$ is unitary and \f$ T \f$ a real symmetric tridiagonal matrix.
   *
   * A tridiagonal matrix is a matrix which has nonzero elements only on the
-  * main diagonal and the first diagonal below and above it. The Hessenberg
+  * _main diagonal and the first diagonal below and above it. The Hessenberg
   * decomposition of a selfadjoint matrix is in fact a tridiagonal
   * decomposition. This class is used in SelfAdjointEigenSolver to compute the
   * eigenvalues and eigenvectors of a selfadjoint matrix.
