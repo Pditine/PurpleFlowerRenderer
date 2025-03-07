@@ -6,6 +6,12 @@
 
 才疏学浅、漏洞百出、请多指教
 
+![示例2](https://tuchuange.oss-cn-beijing.aliyuncs.com/img/%E7%A4%BA%E4%BE%8B2.png)
+
+![示例3](https://tuchuange.oss-cn-beijing.aliyuncs.com/img/%E7%A4%BA%E4%BE%8B3.png)
+
+![示例4](https://tuchuange.oss-cn-beijing.aliyuncs.com/img/%E7%A4%BA%E4%BE%8B4.png)
+
 ![1-ezgif.com-video-to-gif-converter](https://tuchuange.oss-cn-beijing.aliyuncs.com/img/1-ezgif.com-video-to-gif-converter.gif)
 
 ![2-ezgif.com-video-to-gif-converter](https://tuchuange.oss-cn-beijing.aliyuncs.com/img/2-ezgif.com-video-to-gif-converter.gif)
